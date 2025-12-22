@@ -25,7 +25,7 @@ const EditProfile = ({ user }) => {
             dispatch(addUser(res?.data?.data));
 
             setShowToast(true);
-            setTimeout(() => setShowToast(false), 3000);
+            setTimeout(() => setShowToast(false), 2000);
         } catch (err) {
             setError(err?.response?.data?.error || "Update failed");
         }
@@ -93,6 +93,12 @@ const EditProfile = ({ user }) => {
 
    </div>
    {showToast && <div className="toast toast-top toast-end mt-15">
+  <div className="alert alert-success">
+    <span>Profile Updated successfully!!</span>
+  </div>
+</div>}
+
+ {showToast && <div className="toast toast-top toast-end mt-15">
   <div className="alert alert-success">
     <span>Profile Updated successfully!!</span>
   </div>

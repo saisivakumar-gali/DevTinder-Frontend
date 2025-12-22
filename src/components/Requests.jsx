@@ -1,12 +1,26 @@
 import axios from 'axios';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BASE_URL } from '../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { addRequests } from '../utils/requestSlice';
+import { addRequests, removeRequest } from '../utils/requestSlice';
 
 const Requests = () => {
+  const [showToast, setShowToast] = useState(false);
   const dispatch=useDispatch();
   const requests=useSelector(store=>store.requests);
+
+  const reviewRequest=async(status,_id)=>{
+    try{
+      const res=await axios.post(BASE_URL+"/request/review/"+status+"/"+_id,{},{withCredentials:true});
+      dispatch(removeRequest(_id));
+
+      setShowToast(true);
+            setTimeout(() => setShowToast(false), 2000);
+    }
+    catch(err){
+      console.log("Error reviewing request",err);
+    }
+  }
 
   const fetchRequests=async()=>{
     try{
@@ -83,13 +97,17 @@ const Requests = () => {
               <div className="flex flex-col sm:flex-row gap-3">
   <button 
     className="btn btn-sm btn-ghost text-error hover:bg-error/10 border border-error/20 px-6 rounded-xl transition-all duration-300 active:scale-95"
-    onClick={() => /* your reject logic */ null}
+    onClick={() =>{
+      reviewRequest("rejected",request._id);
+    }}
   >
     Reject
   </button>
   <button 
     className="btn btn-sm btn-primary px-8 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-300 active:scale-95"
-    onClick={() => /* your accept logic */ null}
+    onClick={() => {
+      reviewRequest("accepted",request._id);
+    }}
   >
     Accept
   </button>
