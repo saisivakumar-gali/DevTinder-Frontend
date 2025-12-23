@@ -25,7 +25,7 @@ const EditProfile = ({ user }) => {
             dispatch(addUser(res?.data?.data));
 
             setShowToast(true);
-            setTimeout(() => setShowToast(false), 2000);
+            setTimeout(() => setShowToast(false), 1000);
         } catch (err) {
             setError(err?.response?.data?.error || "Update failed");
         }

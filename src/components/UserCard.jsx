@@ -28,14 +28,14 @@ const UserCard = ({ user }) => {
 
     return (
         /* Perfectly matches the Form Card height and width */
-        <div className="card bg-base-300 w-96 h-[550px] shadow-2xl border border-white/5 overflow-hidden">
+        <div className="card bg-base-300 w-96 h-550px shadow-2xl border border-white/5 overflow-hidden">
             <figure className="h-[60%] relative">
                 <img
                     src={photoUrl || "https://via.placeholder.com/400"}
                     alt="User photo"
                     className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-base-300 to-transparent opacity-50"></div>
+                <div className="absolute inset-0 bg-linear-to-t from-base-300 to-transparent opacity-50"></div>
             </figure>
 
             <div className="card-body p-8 flex flex-col justify-between">

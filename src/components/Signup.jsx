@@ -6,7 +6,9 @@ import { useNavigate, Link } from 'react-router-dom';
 import { BASE_URL } from '../utils/constants';
 import { ERROR_ICON } from '../utils/icons';
 
-const Login = () => {
+const Signup = () => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [emailId, setEmailId] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -17,32 +19,34 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleSignup = async () => {
     setLoading(true);
     setError('');
     try {
-      const res = await axios.post(BASE_URL + "/login", {
+      const res = await axios.post(BASE_URL + "/signup", {
+        firstName,
+        lastName,
         emailId,
         password
       }, { withCredentials: true });
       
-      dispatch(addUser(res.data));
+      dispatch(addUser(res?.data?.data || res.data));
+     
       setShowToast(true);
             setTimeout(() => {
                 setShowToast(false);
                 navigate("/");
             } ,1000);
-
-      
     } catch (err) {
-      setError(err?.response?.data || "Invalid Credentials. Please try again.");
+      setError(err?.response?.data || "Signup failed. Please check your details.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className='flex justify-center items-center min-h-[80vh] px-4'>
+    <>
+    <div className='flex justify-center items-center min-h-[85vh] py-10 px-4'>
       <div className="card bg-base-300 w-full max-w-md shadow-2xl border border-white/5 overflow-hidden">
         
         {/* Decorative Top Bar */}
@@ -50,26 +54,54 @@ const Login = () => {
 
         <div className="card-body p-8">
           <div className='text-center mb-6'>
-            <h2 className="text-3xl font-black tracking-tighter">Welcome Back</h2>
-            <p className='text-sm opacity-60 mt-2'>Enter your credentials to access DevTinder</p>
+            <h2 className="text-3xl font-black tracking-tighter">Join DevTinder</h2>
+            <p className='text-sm opacity-60 mt-2'>Create your profile and start connecting</p>
           </div>
 
           <div className="space-y-4">
-           
+            {/* First & Last Name Row */}
+            <div className="flex gap-4">
+              <div className="form-control w-1/2">
+                <label className="label">
+                  <span className="label-text font-bold opacity-70">First Name</span>
+                </label>
+                <input 
+                  type="text" 
+                  placeholder=""
+                  value={firstName} 
+                  className="input input-bordered w-full focus:input-primary transition-all bg-base-200" 
+                  onChange={(e) => setFirstName(e.target.value)} 
+                />
+              </div>
+              <div className="form-control w-1/2">
+                <label className="label">
+                  <span className="label-text font-bold opacity-70">Last Name</span>
+                </label>
+                <input 
+                  type="text" 
+                  placeholder=""
+                  value={lastName} 
+                  className="input input-bordered w-full focus:input-primary transition-all bg-base-200" 
+                  onChange={(e) => setLastName(e.target.value)} 
+                />
+              </div>
+            </div>
+
+            {/* Email Field */}
             <div className="form-control w-full">
               <label className="label">
                 <span className="label-text font-bold opacity-70">Email Address</span>
               </label>
               <input 
                 type="email" 
-                placeholder="email@example.com"
+                placeholder=""
                 value={emailId} 
                 className="input input-bordered w-full focus:input-primary transition-all bg-base-200" 
                 onChange={(e) => setEmailId(e.target.value)} 
               />
             </div>
 
-            
+            {/* Password Field */}
             <div className="form-control w-full">
               <label className="label">
                 <span className="label-text font-bold opacity-70">Password</span>
@@ -90,48 +122,47 @@ const Login = () => {
                   {showPassword ? "Hide" : "Show"}
                 </button>
               </div>
-              <label className="label">
-                <span className="label-text-alt link link-hover opacity-50">Forgot password?</span>
-              </label>
             </div>
           </div>
 
-          {/* Elegant Error Message - No background, just text and icon */}
+          {/* Elegant Error Message */}
           {error && (
             <div className="flex items-center gap-2 mt-4 px-1 text-error animate-pulse">
-              <ERROR_ICON/>
+              <ERROR_ICON />
               <span className="text-xs font-medium">{error}</span>
             </div>
           )}
 
           {/* Action Button */}
-          <div className="card-actions flex-col mt-6">
+          <div className="card-actions flex-col mt-8">
             <button 
               className={`btn btn-primary btn-block text-lg shadow-lg ${loading ? 'loading' : ''}`} 
-              onClick={handleLogin}
+              onClick={handleSignup}
               disabled={loading}
             >
-              {loading ? "Verifying..." : "Login"}
+              {loading ? "Creating Account..." : "Create Account"}
             </button>
             
             <div className='text-center w-full mt-6'>
               <p className='text-sm opacity-70'>
-                New to DevTinder?{" "}
-                <Link to="/signup" className='text-primary font-bold hover:underline'>
-                  Create Account
+                Already have an account?{" "}
+                <Link to="/login" className='text-primary font-bold hover:underline'>
+                  Login here
                 </Link>
               </p>
             </div>
           </div>
         </div>
       </div>
-      {showToast && <div className="toast toast-top toast-end mt-15">
+      
+    </div>
+     {showToast && <div className="toast toast-top toast-end mt-15">
   <div className="alert alert-success">
-    <span>Login successfull!!</span>
+    <span>Sign Up Account successfully!!</span>
   </div>
 </div>}
-    </div>
+    </>
   );
 };
 
-export default Login;
+export default Signup;
