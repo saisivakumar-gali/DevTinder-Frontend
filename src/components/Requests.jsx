@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addRequests, removeRequest } from '../utils/requestSlice';
 
 const Requests = () => {
-  const [showToast, setShowToast] = useState(false);
+  
   const dispatch=useDispatch();
   const requests=useSelector(store=>store.requests);
 
@@ -14,8 +14,7 @@ const Requests = () => {
       const res=await axios.post(BASE_URL+"/request/review/"+status+"/"+_id,{},{withCredentials:true});
       dispatch(removeRequest(_id));
 
-      setShowToast(true);
-            setTimeout(() => setShowToast(false), 2000);
+     
     }
     catch(err){
       console.log("Error reviewing request",err);

@@ -39,7 +39,7 @@ const Login = () => {
       <div className="card bg-base-300 w-full max-w-md shadow-2xl border border-white/5 overflow-hidden">
         
         {/* Decorative Top Bar */}
-        <div className="h-2 w-full bg-gradient-to-r from-primary via-secondary to-accent"></div>
+        <div className="h-2 w-full bg-linear-to-r from-primary via-secondary to-accent"></div>
 
         <div className="card-body p-8">
           <div className='text-center mb-6'>

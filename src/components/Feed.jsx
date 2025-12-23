@@ -14,7 +14,8 @@ const Feed = () => {
   try{
     
     const res=await axios.get(BASE_URL+"/feed",{withCredentials:true});
-    dispatch(addFeed(res.data));
+    console.log(res.data.data);
+    dispatch(addFeed(res.data.data));
 
   }
   catch(err){
@@ -26,9 +27,20 @@ const Feed = () => {
   getFeed();
  },[]);
 
+//  if(!feed||feed.length===0)return;
+
+
+  if (!feed||feed.length === 0) {
+    return (
+      <div className="flex justify-center items-center h-[60vh]">
+        <h1 className='font-bold text-2xl opacity-50 italic'>No new Users found yet...</h1>
+      </div>
+    );
+  }
+
   return feed && (
-    <div className='flex  justify-center my-10'>
-      <UserCard user={feed.data[0]}/>
+    <div className='flex  justify-center my-7'>
+      <UserCard user={feed[0]}/>
     </div>
   )
 }

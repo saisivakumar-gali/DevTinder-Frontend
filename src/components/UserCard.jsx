@@ -1,7 +1,30 @@
+import axios from 'axios';
 import React from 'react';
+import { BASE_URL } from '../utils/constants';
+import { useDispatch } from 'react-redux';
+import { removeUserFromFeed } from '../utils/feedSlice';
 
 const UserCard = ({ user }) => {
-    const { firstName, lastName, age, gender, about, photoUrl } = user;
+
+    if(!user){
+        return (
+      <div className="flex justify-center items-center h-[60vh]">
+        <h1 className='font-bold text-2xl opacity-50 italic'>No new Users found yet...</h1>
+      </div>
+    );
+    }
+    const { firstName, lastName, age, gender, about, photoUrl,_id } = user;
+    const dispatch=useDispatch();
+
+    const handleSendRequest=async(status,_id)=>{
+        try{
+            const res=await axios.post(BASE_URL+"/request/send/"+status+"/"+_id,{}, { withCredentials: true });
+            dispatch(removeUserFromFeed(_id));
+        }
+        catch(err){
+            console.log("Send Request Error:",err);
+        }
+    }
 
     return (
         /* Perfectly matches the Form Card height and width */
@@ -32,8 +55,13 @@ const UserCard = ({ user }) => {
                 </div>
                 
                 <div className="card-actions justify-center gap-3">
-                    <button className="btn btn-outline btn-sm flex-1">Ignore</button>
-                    <button className="btn btn-primary btn-sm flex-1">Interested</button>
+                    <button className="btn btn-outline btn-sm flex-1" onClick={()=>{
+                        handleSendRequest("ignored",_id)
+                    }
+                    }>Ignore</button>
+                    <button className="btn btn-primary btn-sm flex-1" onClick={()=>{
+                        handleSendRequest("interested",_id)
+                    }}>Interested</button>
                 </div>
             </div>
         </div>
