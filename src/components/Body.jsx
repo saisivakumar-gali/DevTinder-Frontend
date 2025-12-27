@@ -1,28 +1,41 @@
-import { Outlet, useNavigate } from "react-router-dom";
-import Navbar from "./Navbar";
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import React, { useEffect } from 'react';
+import Navbar from './Navbar';
+import { Outlet, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { BASE_URL } from '../utils/constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { addUser } from '../utils/userSlice';
 
 const Body = () => {
-  const user = useSelector((store) => store.user);
-  const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const user = useSelector((store) => store.user);
 
-  useEffect(() => {
-    // If no user is in Redux, redirect to login
-    // We allow access to /signup so new users can register
-    if (!user && window.location.pathname !== "/signup") {
-      navigate("/login");
-    }
-  }, [user, navigate]);
+    const fetchUser = async () => {
+        if (user) return; // If user is already in Redux, don't fetch again
+        try {
+            const res = await axios.get(BASE_URL + "/profile/view", {
+                withCredentials: true, // This sends the cookie back
+            });
+            dispatch(addUser(res.data));
+        } catch (err) {
+            // If token is invalid or expired, redirect to login
+            if (err.response && err.response.status === 401) {
+                navigate("/login");
+            }
+        }
+    };
 
-  return (
-    <div className="min-h-screen bg-base-100">
-      <Navbar />
-      <div className="container mx-auto">
-        <Outlet />
-      </div>
-    </div>
-  );
+    useEffect(() => {
+        fetchUser();
+    }, []);
+
+    return (
+        <div>
+            <Navbar />
+            <Outlet />
+        </div>
+    );
 };
 
 export default Body;
