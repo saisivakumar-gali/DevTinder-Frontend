@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import Navbar from './Navbar';
 import { Outlet, useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 import axios from 'axios';
 import { BASE_URL } from '../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,15 +12,15 @@ const Body = () => {
     const user = useSelector((store) => store.user);
 
     const fetchUser = async () => {
-        if (user) return; // If user is already in Redux, don't fetch again
+        if (user) return; // Only fetch if Redux is empty (on refresh)
         try {
             const res = await axios.get(BASE_URL + "/profile/view", {
-                withCredentials: true, // This sends the cookie back
+                withCredentials: true,
             });
             dispatch(addUser(res.data));
         } catch (err) {
-            // If token is invalid or expired, redirect to login
-            if (err.response && err.response.status === 401) {
+            // Only redirect if they are actually trying to access a protected page
+            if (window.location.pathname !== "/login" && window.location.pathname !== "/signup") {
                 navigate("/login");
             }
         }
@@ -31,9 +31,11 @@ const Body = () => {
     }, []);
 
     return (
-        <div>
+        <div className="min-h-screen flex flex-col">
             <Navbar />
-            <Outlet />
+            <div className="flex-grow">
+                <Outlet />
+            </div>
         </div>
     );
 };
