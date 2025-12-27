@@ -1,1 +1,1 @@
-export const BASE_URL = "https://dev-tinder-lemon.vercel.app/";
+export const BASE_URL = "https://dev-tinder-lemon.vercel.app";
