@@ -12,7 +12,8 @@ const Chat = () => {
 
     // Replace this with your actual logged-in user ID from Redux/Context
     const user=useSelector((store) => store.user);
-    const currentUserId = user._id; 
+    const currentUserId = user?._id; 
+    console.log("Current User ID:", currentUserId);
 
     // Auto-scroll to latest message
     useEffect(() => {
@@ -20,6 +21,7 @@ const Chat = () => {
     }, [messages]);
 
     useEffect(() => {
+        if (!currentUserId) return; // Wait for user ID to be available
         const socket = createSocketConnection();
         socketRef.current = socket;
 
@@ -32,7 +34,7 @@ const Chat = () => {
         });
 
         return () => socket.disconnect();
-    }, [targetUserId]);
+    }, [currentUserId,targetUserId]);
 
     const sendMessage = () => {
         if (!input.trim()) return;
