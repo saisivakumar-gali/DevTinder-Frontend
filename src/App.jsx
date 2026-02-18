@@ -9,7 +9,7 @@ import Connections from './components/Connections'
 import Requests from './components/Requests'
 import { Provider } from 'react-redux'
 import appStore from './utils/appStore'
-import Chat from './components/chat'
+import Chat from './components/Chat'
 
 const App = () => {
   return (
