@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { BASE_URL } from '../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { addConnections } from '../utils/connectionSlice';
+import { Link } from 'react-router-dom';
 
 const Connections = () => {
   const dispatch = useDispatch();
@@ -72,7 +73,7 @@ const Connections = () => {
                 </p>
 
                 <div className='mt-3 flex gap-2'>
-                   <button className="btn btn-xs btn-outline btn-primary px-4">Message</button>
+                  <Link to={"/chat/"+_id}> <button className="btn btn-xs btn-outline btn-primary px-4">Message</button></Link>
                    <button className="btn btn-xs btn-ghost opacity-50">View Profile</button>
                 </div>
               </div>
