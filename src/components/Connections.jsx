@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import { BASE_URL } from '../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { addConnections } from '../utils/connectionSlice';
@@ -13,81 +13,31 @@ const Connections = () => {
     try {
       const res = await axios.get(BASE_URL + "/user/requests/connections", { withCredentials: true });
       dispatch(addConnections(res.data.data));
-    } catch (err) {
-      console.log("Fetch Connections Error:", err);
-    }
+    } catch (err) { console.log(err); }
   };
 
-  useEffect(() => {
-    fetchConnections();
-  }, []);
-
-  if (!connections) return null;
-
-  if (connections.length === 0) {
-    return (
-      <div className="flex justify-center items-center h-[60vh]">
-        <h1 className='font-bold text-2xl opacity-50 italic'>No Connections found yet...</h1>
-      </div>
-    );
-  }
+  useEffect(() => { fetchConnections(); }, []);
 
   return (
-    // Added container constraints and pb-20 to avoid footer overlap
-    <div className='max-w-4xl mx-auto my-10 px-4 pb-20'>
-      <div className="flex justify-between items-center mb-10 border-b border-base-300 pb-4">
-        <h1 className='font-extrabold text-4xl tracking-tight'>Connections</h1>
-        <div className="badge badge-primary badge-lg px-4">{connections.length} total</div>
-      </div>
-
-      <div className='grid gap-6'>
-        {connections.map((connection) => {
-          const { firstName, lastName, photoUrl, gender, age, about, _id } = connection;
-          
-          return (
-            <div 
-              key={_id} 
-              className='flex items-center gap-6 p-5 rounded-2xl bg-base-300/50 hover:bg-base-300 border border-white/5 transition-all shadow-xl hover:shadow-primary/5 group'
-            >
-              {/* Profile Image with Ring */}
-              <div className="avatar">
-                <div className="w-24 h-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                  <img src={photoUrl || "https://via.placeholder.com/150"} alt="profile" />
-                </div>
+    <div className='max-w-3xl mx-auto py-10'>
+      <h1 className='text-5xl font-black tracking-tighter mb-12 text-black'>Connections<span className="text-[#9A7B5C]">.</span></h1>
+      <div className='grid gap-4'>
+        {connections?.map((conn) => (
+          <div key={conn._id} className='bg-white p-6 rounded-[35px] flex items-center justify-between shadow-sm border border-black/[0.03] hover:shadow-xl transition-all duration-500'>
+            <div className="flex items-center gap-6">
+              <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#F2EDE4]">
+                <img src={conn.photoUrl} alt="pfp" className="object-cover w-full h-full" />
               </div>
-
-              {/* Text Info Section */}
-              <div className='flex-1 overflow-hidden'>
-                <div className='flex items-baseline gap-2'>
-                  <h2 className='font-bold text-2xl group-hover:text-primary transition-colors'>
-                    {firstName} {lastName}
-                  </h2>
-                  {age && (
-                    <span className='text-sm opacity-60 font-medium'>• {age} {gender && `, ${gender}`}</span>
-                  )}
-                </div>
-
-                {/* About Section with Line Clamping */}
-                <p className='mt-2 text-sm opacity-80 leading-relaxed line-clamp-2 italic'>
-                  {about ? `"${about}"` : "No bio available."}
-                </p>
-
-                <div className='mt-3 flex gap-2'>
-                  <Link to={"/chat/"+_id}> <button className="btn btn-xs btn-outline btn-primary px-4">Message</button></Link>
-                   <button className="btn btn-xs btn-ghost opacity-50">View Profile</button>
-                </div>
-              </div>
-
-              {/* Status Indicator */}
-              <div className="hidden sm:block">
-                 <div className="badge badge-success badge-xs"></div>
+              <div>
+                <h2 className='font-black text-xl'>{conn.firstName} {conn.lastName}</h2>
+                <p className='text-[#9A7B5C] font-bold text-[10px] uppercase tracking-widest'>{conn.gender} // {conn.age}</p>
               </div>
             </div>
-          )
-        })}
+            <Link to={"/chat/"+conn._id} className="bg-[#2D2D2D] text-white px-8 py-3 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-black transition-all">Message</Link>
+          </div>
+        ))}
       </div>
     </div>
-  )
-}
-
+  );
+};
 export default Connections;

@@ -27,14 +27,10 @@ const Body = () => {
     useEffect(() => { fetchUser(); }, []);
 
     return (
-        <div className="min-h-screen bg-[#030712] text-slate-200 selection:bg-indigo-500/30 font-sans">
-            {/* Background Decorative Glows */}
-            <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/10 blur-[120px] rounded-full -z-10"></div>
-            <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/10 blur-[120px] rounded-full -z-10"></div>
-            
-            <div className="max-w-[1280px] mx-auto px-6">
+        <div className="min-h-screen bg-[#F2EDE4] text-[#2D2D2D] font-sans">
+            <div className="max-w-[1440px] mx-auto px-6 md:px-12">
                 <Navbar />
-                <main className="py-8">
+                <main className="py-10">
                     <Outlet />
                 </main>
             </div>

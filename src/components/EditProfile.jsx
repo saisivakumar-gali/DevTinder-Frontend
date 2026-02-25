@@ -23,88 +23,65 @@ const EditProfile = ({ user }) => {
                 firstName, lastName, photoUrl, gender, age, about,
             }, { withCredentials: true });
             dispatch(addUser(res?.data?.data));
-
             setShowToast(true);
-            setTimeout(() => setShowToast(false), 1000);
+            setTimeout(() => setShowToast(false), 2000);
         } catch (err) {
             setError(err?.response?.data?.error || "Update failed");
         }
     };
 
     return (
-    <>    
-  <div className='flex justify-center items-center gap-10 px-4 h-[calc(100vh-80px)] overflow-hidden bg-base-100'>
-            
-            
-  <div className="card bg-base-300 w-96 h-[550px] shadow-2xl border border-white/5">
-    <div className="card-body p-8 flex flex-col justify-between">
-       <div>
-      <h2 className="text-2xl font-bold text-primary mb-4 text-center">Edit Profile</h2>
-                        
-        <div className="space-y-3">
-                            <div className="grid grid-cols-2 gap-3">
-                                <div className="form-control">
-                                    <label className="label-text text-[10px] font-bold opacity-50 uppercase mb-1">First Name</label>
-                                    <input type="text" value={firstName} className="input input-bordered input-sm w-full" onChange={(e) => setFirstName(e.target.value)} />
-                                </div>
-                                <div className="form-control">
-                                    <label className="label-text text-[10px] font-bold opacity-50 uppercase mb-1">Last Name</label>
-                                    <input type="text" value={lastName} className="input input-bordered input-sm w-full" onChange={(e) => setLastName(e.target.value)} />
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-3">
-                                <div className="form-control">
-                                    <label className="label-text text-[10px] font-bold opacity-50 uppercase mb-1">Age</label>
-                                    <input type="number" value={age} className="input input-bordered input-sm w-full" onChange={(e) => setAge(e.target.value)} />
-                                </div>
-                                <div className="form-control">
-                                    <label className="label-text text-[10px] font-bold opacity-50 uppercase mb-1">Gender</label>
-                                    <select className="select select-bordered select-sm w-full" value={gender} onChange={(e) => setGender(e.target.value)}>
-                                        <option value="" disabled>Select</option>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div className="form-control">
-                                <label className="label-text text-[10px] font-bold opacity-50 uppercase mb-1">Photo URL</label>
-                                <input type="text" value={photoUrl} className="input input-bordered input-sm w-full" onChange={(e) => setPhotoUrl(e.target.value)} />
-                            </div>
-
-                            <div className="form-control">
-                                <label className="label-text text-[10px] font-bold opacity-50 uppercase mb-1">About</label>
-                                <textarea className="textarea textarea-bordered w-full h-20 resize-none leading-tight" value={about} onChange={(e) => setAbout(e.target.value)} />
-                            </div>
+        <div className="flex flex-col lg:flex-row justify-center items-start gap-16 px-4 py-10">
+            {/* --- LEFT: EDIT FORM --- */}
+            <div className="w-full max-w-md bg-white p-10 rounded-[40px] shadow-xl border border-black/5">
+                <h2 className="text-3xl font-black tracking-tighter mb-8 text-[#9A7B5C]">Edit Profile</h2>
+                
+                <div className="space-y-5">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="form-control">
+                            <label className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-2">First Name</label>
+                            <input type="text" value={firstName} className="bg-[#F2EDE4] border-none rounded-2xl p-3 text-sm focus:ring-2 ring-[#9A7B5C] outline-none" onChange={(e) => setFirstName(e.target.value)} />
+                        </div>
+                        <div className="form-control">
+                            <label className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-2">Last Name</label>
+                            <input type="text" value={lastName} className="bg-[#F2EDE4] border-none rounded-2xl p-3 text-sm focus:ring-2 ring-[#9A7B5C] outline-none" onChange={(e) => setLastName(e.target.value)} />
                         </div>
                     </div>
 
-                    <div className="mt-2">
-                        {error && <p className='text-error text-[10px] mb-2 text-center font-semibold'>{error}</p>}
-                        <button className="btn btn-primary btn-block btn-sm" onClick={saveProfile}>Update Profile</button>
+                    <div className="form-control">
+                        <label className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-2">Photo URL</label>
+                        <input type="text" value={photoUrl} className="bg-[#F2EDE4] border-none rounded-2xl p-3 text-sm outline-none" onChange={(e) => setPhotoUrl(e.target.value)} />
                     </div>
+
+                    <div className="form-control">
+                        <label className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-2">Bio</label>
+                        <textarea className="bg-[#F2EDE4] border-none rounded-2xl p-3 text-sm h-28 resize-none outline-none" value={about} onChange={(e) => setAbout(e.target.value)} />
+                    </div>
+
+                    {error && <p className='text-red-500 text-[10px] font-bold uppercase'>{error}</p>}
+                    
+                    <button className="w-full bg-[#2D2D2D] text-white py-4 rounded-full font-black text-xs uppercase tracking-widest hover:bg-black transition-all active:scale-95 mt-4" onClick={saveProfile}>
+                        Save Changes
+                    </button>
                 </div>
             </div>
 
-            {/* Standardized UserCard */}
-            <UserCard user={{ firstName, lastName, age, gender, about, photoUrl }} />
+            {/* --- RIGHT: THE DYNAMIC PREVIEW --- */}
+            <div className="w-full lg:w-auto flex flex-col items-center">
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-30 mb-6">Live Preview</p>
+                {/* We pass the local state variables to UserCard so the photo updates instantly */}
+                <UserCard user={{ firstName, lastName, age, gender, about, photoUrl }} isPreview={true} />
+            </div>
 
-   </div>
-   {showToast && <div className="toast toast-top toast-end mt-15">
-  <div className="alert alert-success">
-    <span>Profile Updated successfully!!</span>
-  </div>
-</div>}
-
- {showToast && <div className="toast toast-top toast-end mt-15">
-  <div className="alert alert-success">
-    <span>Profile Updated successfully!!</span>
-  </div>
-</div>}
-   </>
- );
+            {showToast && (
+                <div className="toast toast-top toast-end">
+                    <div className="alert bg-[#9A7B5C] text-white rounded-2xl border-none shadow-2xl">
+                        <span className="font-bold">✓ Profile Updated</span>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 };
 
 export default EditProfile;
