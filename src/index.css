@@ -3,3 +3,39 @@
 @plugin "daisyui"{
      themes: dracula --default, abyss --prefersdark, cupcake, dracula;
 }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  /* High-end metallic gradient */
+  background: linear-gradient(135deg, #121212 0%, #1c1c1c 50%, #000000 100%);
+  background-attachment: fixed; /* Keeps gradient stationary while scrolling */
+  color: #ffffff;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Optional: Smooth scroll for the whole app */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Customize the scrollbar to match the dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #444;
+}
