@@ -13,35 +13,29 @@ const Body = () => {
     const user = useSelector((store) => store.user);
 
     const fetchUser = async () => {
-        if (user) return;
+        if (user) return; // Don't fetch if user is already in Redux
         try {
-            const res = await axios.get(BASE_URL + "/profile/view", { withCredentials: true });
+            const res = await axios.get(BASE_URL + "/profile/view", {
+                withCredentials: true,
+            });
             dispatch(addUser(res.data));
         } catch (err) {
+            // Only redirect if they are not on public pages
             if (location.pathname !== "/login" && location.pathname !== "/signup") {
                 navigate("/login");
             }
         }
     };
 
-    useEffect(() => { fetchUser(); }, []);
+    useEffect(() => {
+        fetchUser();
+    }, []);
 
     return (
-        <div 
-            className="min-h-screen transition-colors duration-500" 
-            style={{ backgroundColor: '#F2EDE4', color: '#2D2D2D', fontFamily: 'Inter, sans-serif' }}
-        >
-            <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-                <Navbar />
-                <main className="pb-24">
-                    <Outlet />
-                </main>
-            </div>
-            
-            {/* Minimalist Side Branding */}
-            <div className="fixed bottom-10 left-12 hidden xl:flex gap-8 opacity-20 text-[10px] font-bold uppercase tracking-[0.4em] rotate-180 [writing-mode:vertical-lr]">
-                <span>DevTinder // Connect</span>
-                <span>Match // Code</span>
+        <div className="min-h-screen flex flex-col">
+            <Navbar />
+            <div className="grow">
+                <Outlet />
             </div>
         </div>
     );
