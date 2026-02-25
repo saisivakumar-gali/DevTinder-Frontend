@@ -100,7 +100,7 @@ const Chat = () => {
                         const isSelf = msg.senderId === currentUserId;
                         return (
                             <div key={index} className={`flex ${isSelf ? 'justify-end' : 'justify-start'}`}>
-                                <div className={`max-w-md p-5 border ${isSelf ? 'bg-black text-white border-black' : 'bg-white text-black border-gray-200'}`}>
+                                <div className={`max-w-md p-3 border ${isSelf ? 'bg-black text-white border-black' : 'bg-white text-black border-gray-200'}`}>
                                     <p className='text-sm font-medium leading-relaxed'>{msg.text}</p>
                                     <div className={`text-[9px] mt-2 font-bold uppercase opacity-40 flex gap-2 ${isSelf ? 'justify-end' : 'justify-start'}`}>
                                         {formatTime(msg.createdAt || new Date())}
