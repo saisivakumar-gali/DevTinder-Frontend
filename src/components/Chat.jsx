@@ -11,64 +11,129 @@ const Chat = () => {
     const [targetUser, setTargetUser] = useState(null);
     const socketRef = useRef(null);
     const scrollRef = useRef(null);
+
     const user = useSelector((store) => store.user);
+    const currentUserId = user?._id;
+
+    const formatTime = (timestamp) => {
+        if (!timestamp) return "";
+        return new Date(timestamp).toLocaleTimeString([], { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        });
+    };
 
     const fetchChatMessages = async () => {
         try {
-            const res = await axios.get(`${BACKEND_URL}/chat/${targetUserId}`, { withCredentials: true });
+            const res = await axios.get(`${BACKEND_URL}/chat/${targetUserId}`, {
+                withCredentials: true
+            });
             setMessages(res.data.messages || []);
-            setTargetUser(res.data.participants?.find(p => p._id !== user._id));
-        } catch (err) { console.log(err); }
+            const otherPerson = res.data.participants?.find(p => p._id !== currentUserId);
+            setTargetUser(otherPerson);
+        } catch (err) {
+            console.error("Error fetching chat messages:", err);
+        }
     };
 
-    useEffect(() => { if (targetUserId) fetchChatMessages(); }, [targetUserId]);
-    useEffect(() => { scrollRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
+    useEffect(() => {
+        if (targetUserId && currentUserId) fetchChatMessages();
+    }, [targetUserId, currentUserId]);
 
     useEffect(() => {
+        scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
+
+    useEffect(() => {
+        if (!currentUserId) return; 
         const socket = createSocketConnection();
         socketRef.current = socket;
-        socket.emit("joinChat", { senderId: user._id, targetUserId });
-        socket.on("messageReceived", (msg) => setMessages(prev => [...prev, msg]));
+        socket.emit("joinChat", { senderId: currentUserId, targetUserId });
+        socket.on("messageReceived", (newMessage) => {
+            setMessages((prev) => [...prev, newMessage]);
+        });
         return () => socket.disconnect();
-    }, [targetUserId]);
+    }, [currentUserId, targetUserId]);
 
     const sendMessage = () => {
         if (!input.trim()) return;
-        socketRef.current.emit("sendMessage", { senderId: user._id, targetUserId, text: input });
+        socketRef.current.emit("sendMessage", {
+            senderId: currentUserId,
+            targetUserId,
+            text: input
+        });
         setInput("");
     };
 
     return (
-        <div className='max-w-4xl mx-auto h-[75vh] bg-[#0F172A] rounded-[50px] overflow-hidden shadow-2xl flex flex-col border border-white/5'>
-            <header className='p-8 bg-white/5 backdrop-blur-md flex items-center gap-4 border-b border-white/5'>
-                <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-[#9A7B5C]">
-                    <img src={targetUser?.photoUrl} alt="target" className="w-full h-full object-cover" />
+        <div className='max-w-5xl mx-auto border border-black h-[80vh] flex bg-white overflow-hidden shadow-[20px_20px_0px_0px_rgba(0,0,0,1)]'>
+            
+            {/* Sidebar Branding (Noir Style) */}
+            <div className='w-20 md:w-64 bg-black flex flex-col items-center py-10 text-white'>
+                <div className='w-12 h-12 border-2 border-white grayscale mb-6 overflow-hidden'>
+                    <img src={targetUser?.photoUrl} alt="target" className='object-cover w-full h-full' />
                 </div>
-                <div>
-                    <h1 className='text-white font-black text-xl tracking-tight'>{targetUser?.firstName}</h1>
-                    <p className='text-[#9A7B5C] text-[10px] font-bold uppercase'>Online Session</p>
+                <h1 className='hidden md:block font-black text-xl tracking-tighter uppercase text-center px-4'>
+                    {targetUser?.firstName}<br/>{targetUser?.lastName}
+                </h1>
+                <div className='mt-auto p-4 hidden md:block'>
+                    <p className='text-[10px] font-bold uppercase tracking-widest opacity-40 rotate-180 [writing-mode:vertical-lr]'>
+                        Established Connection // 2026
+                    </p>
                 </div>
-            </header>
-
-            <div className='flex-1 overflow-y-auto p-10 space-y-6'>
-                {messages.map((msg, i) => {
-                    const isSelf = msg.senderId === user._id;
-                    return (
-                        <div key={i} className={`flex ${isSelf ? 'justify-end' : 'justify-start'}`}>
-                            <div className={`max-w-[70%] p-5 rounded-[25px] ${isSelf ? 'bg-[#9A7B5C] text-white rounded-br-none' : 'bg-white/10 text-slate-200 rounded-bl-none'}`}>
-                                <p className="text-sm font-medium">{msg.text}</p>
-                            </div>
-                        </div>
-                    );
-                })}
-                <div ref={scrollRef} />
             </div>
 
-            <div className='p-8 bg-white/5 flex items-center gap-4'>
-                <input className='flex-1 bg-white/5 border border-white/10 rounded-full py-4 px-8 text-white text-sm outline-none focus:border-[#9A7B5C]' placeholder="Write a message..." value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && sendMessage()} />
-                <button className='bg-white text-black w-14 h-14 rounded-full font-bold flex items-center justify-center' onClick={sendMessage}>➔</button>
+            {/* Main Chat Area */}
+            <div className='flex-1 flex flex-col relative'>
+                {/* Header Info */}
+                <header className='p-6 border-b border-gray-100 flex justify-between items-center'>
+                    <span className='text-[10px] font-black uppercase tracking-[0.3em]'>Direct Message // encrypted</span>
+                    <div className='flex items-center gap-2'>
+                        <div className='w-2 h-2 bg-black rounded-full animate-pulse'></div>
+                        <span className='text-[10px] font-bold uppercase tracking-widest'>Status: Active</span>
+                    </div>
+                </header>
+
+                {/* Messages View */}
+                <div className='flex-1 overflow-y-auto p-8 space-y-6 bg-[#FAFAFA]'>
+                    {messages.map((msg, index) => {
+                        const isSelf = msg.senderId === currentUserId;
+                        return (
+                            <div key={index} className={`flex ${isSelf ? 'justify-end' : 'justify-start'}`}>
+                                <div className={`max-w-md p-5 border ${isSelf ? 'bg-black text-white border-black' : 'bg-white text-black border-gray-200'}`}>
+                                    <p className='text-sm font-medium leading-relaxed'>{msg.text}</p>
+                                    <div className={`text-[9px] mt-2 font-bold uppercase opacity-40 flex gap-2 ${isSelf ? 'justify-end' : 'justify-start'}`}>
+                                        {formatTime(msg.createdAt || new Date())}
+                                        {isSelf && <span>[Sent]</span>}
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                    <div ref={scrollRef} />
+                </div>
+
+                {/* Terminal Input */}
+                <div className='p-6 border-t border-black bg-white flex items-center gap-4'>
+                    <span className='font-bold opacity-30'>{'>'}</span>
+                    <input 
+                        className='flex-1 outline-none text-sm font-bold placeholder:text-gray-300' 
+                        type="text" 
+                        placeholder="Type command / message..." 
+                        value={input} 
+                        onChange={(e) => setInput(e.target.value)} 
+                        onKeyDown={(e) => e.key === 'Enter' && sendMessage()} 
+                    />
+                    <button 
+                        className='bg-black text-white px-8 py-3 font-bold text-xs uppercase tracking-widest hover:invert transition-all' 
+                        onClick={sendMessage}
+                    >
+                        Send
+                    </button>
+                </div>
             </div>
         </div>
     );
 };
+
 export default Chat;
