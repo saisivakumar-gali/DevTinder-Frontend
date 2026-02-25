@@ -29,7 +29,7 @@ const UserCard = ({ user }) => {
 
             <div className="p-8 -mt-12 relative z-10">
                 <div className="w-20 h-20 rounded-full border-4 border-white overflow-hidden shadow-md mb-4 bg-white">
-                    <img src={photoUrl} alt="avatar" className="w-full h-full object-cover grayscale" />
+                    <img src={photoUrl} alt="avatar" className="w-full h-full object-cover " />
                 </div>
 
                 <h2 className="text-3xl font-bold tracking-tighter">{firstName} {lastName}</h2>
@@ -52,7 +52,7 @@ const UserCard = ({ user }) => {
                         onClick={() => handleSendRequest("ignored", _id)}
                         className="flex-1 border border-gray-200 py-4 font-bold text-sm uppercase tracking-widest hover:bg-gray-50 transition-all"
                     >
-                        Message
+                        Ignore
                     </button>
                 </div>
                 
