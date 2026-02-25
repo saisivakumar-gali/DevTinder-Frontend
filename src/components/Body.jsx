@@ -27,7 +27,7 @@ const Body = () => {
     useEffect(() => { fetchUser(); }, []);
 
     return (
-        <div className="min-h-screen bg-[#fbfbfb] text-[#2D2D2D] font-sans">
+        <div className="min-h-screen bg-[#f5e9e9] text-[#2D2D2D] font-sans">
             <div className="max-w-[1440px] mx-auto px-6 md:px-12">
                 <Navbar />
                 <main className="py-10">
