@@ -28,7 +28,7 @@ const Connections = () => {
       <div className='grid gap-1'>
         {connections?.map((connection) => (
           <div key={connection._id} className='flex items-center gap-6 p-6 bg-white border border-gray-100 hover:border-black transition-all group'>
-            <div className="w-16 h-16 border border-gray-200 grayscale group-hover:grayscale-0 transition-all">
+            <div className="w-16 h-16 border border-gray-200  group-hover:grayscale-0 transition-all">
               <img src={connection.photoUrl} alt="profile" className="w-full h-full object-cover" />
             </div>
             <div className='flex-1'>
