@@ -5,63 +5,82 @@ import { useDispatch } from 'react-redux';
 import { removeUserFromFeed } from '../utils/feedSlice';
 
 const UserCard = ({ user }) => {
+    const dispatch = useDispatch();
+    if (!user) return null;
 
-    if(!user){
-        return (
-      <div className="flex justify-center items-center h-[60vh]">
-        <h1 className='font-bold text-2xl opacity-50 italic'>No new Users found yet...</h1>
-      </div>
-    );
-    }
-    const { firstName, lastName, age, gender, about, photoUrl,_id } = user;
-    const dispatch=useDispatch();
+    const { firstName, lastName, age, gender, about, photoUrl, _id } = user;
 
-    const handleSendRequest=async(status,_id)=>{
-        try{
-            const res=await axios.post(BASE_URL+"/request/send/"+status+"/"+_id,{}, { withCredentials: true });
+    const handleSendRequest = async (status, _id) => {
+        try {
+            await axios.post(BASE_URL + "/request/send/" + status + "/" + _id, {}, { withCredentials: true });
             dispatch(removeUserFromFeed(_id));
-        }
-        catch(err){
-            console.log("Send Request Error:",err);
-        }
-    }
+        } catch (err) { console.log(err); }
+    };
 
     return (
-        /* Perfectly matches the Form Card height and width */
-        <div className="card bg-base-300 w-96 h-550px shadow-2xl border border-white/5 overflow-hidden">
-            <figure className="h-[60%] relative">
-                <img
-                    src={photoUrl || "https://via.placeholder.com/400"}
-                    alt="User photo"
-                    className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-base-300 to-transparent opacity-50"></div>
-            </figure>
-
-            <div className="card-body p-8 flex flex-col justify-between">
-                <div>
-                    <h2 className="card-title text-2xl font-bold truncate">
-                        {firstName} {lastName}
-                    </h2>
-                    {(age || gender) && (
-                        <div className="flex gap-2 mt-1">
-                            {age && <span className="badge badge-sm badge-secondary badge-outline">{age} years</span>}
-                            {gender && <span className="badge badge-sm badge-ghost capitalize">{gender}</span>}
-                        </div>
-                    )}
-                    <p className="mt-3 text-sm opacity-70 line-clamp-3 italic">
-                        "{about || "No description yet..."}"
-                    </p>
-                </div>
+        <div className="flex justify-center items-center py-12 animate-in fade-in zoom-in duration-500">
+            <div className="relative group w-full max-w-[420px] h-[600px] overflow-hidden rounded-[3rem] bg-slate-900 border border-white/10 shadow-2xl">
                 
-                <div className="card-actions justify-center gap-3">
-                    <button className="btn btn-outline btn-sm flex-1" onClick={()=>{
-                        handleSendRequest("ignored",_id)
-                    }
-                    }>Ignore</button>
-                    <button className="btn btn-primary btn-sm flex-1" onClick={()=>{
-                        handleSendRequest("interested",_id)
-                    }}>Interested</button>
+                {/* Hero Background Image */}
+                <img 
+                    src={photoUrl} 
+                    alt="Developer" 
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                />
+                
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-[#030712]/40 to-transparent"></div>
+
+                {/* Content Plate */}
+                <div className="absolute bottom-0 left-0 right-0 p-8 backdrop-blur-md bg-white/[0.03] border-t border-white/10">
+                    <div className="flex justify-between items-end mb-4">
+                        <div>
+                            <h2 className="text-4xl font-bold tracking-tight text-white">
+                                {firstName} <span className="text-indigo-400">{lastName}</span>
+                            </h2>
+                            <p className="text-indigo-300 font-mono text-xs mt-1 uppercase tracking-widest">
+                                {gender} // {age} Years
+                            </p>
+                        </div>
+                    </div>
+
+                    <p className="text-slate-300 text-sm leading-relaxed line-clamp-2 mb-6 opacity-80 italic">
+                        "{about || "Ready to collaborate on the next big tech stack."}"
+                    </p>
+
+                    {/* Tech Badges (Dummy Icons for UI) */}
+                    <div className="flex gap-3 mb-8">
+                        {['React', 'Node', 'AWS'].map(tech => (
+                            <span key={tech} className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-[10px] font-bold text-slate-400">
+                                {tech}
+                            </span>
+                        ))}
+                    </div>
+
+                    {/* Premium Action Buttons */}
+                    <div className="flex gap-4">
+                        <button 
+                            className="flex-[2] bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl transition-all shadow-[0_0_20px_rgba(79,70,229,0.3)] active:scale-95 flex items-center justify-center gap-2"
+                            onClick={() => handleSendRequest("interested", _id)}
+                        >
+                            <span>Connect</span>
+                            <span className="text-xl">⚡</span>
+                        </button>
+                        <button 
+                            className="flex-1 bg-white/5 hover:bg-white/10 text-white font-bold py-4 rounded-2xl border border-white/10 transition-all active:scale-95"
+                            onClick={() => handleSendRequest("ignored", _id)}
+                        >
+                            Skip
+                        </button>
+                    </div>
+                </div>
+
+                {/* Status Indicator */}
+                <div className="absolute top-6 left-6 px-4 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 backdrop-blur-md">
+                    <div className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                        <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-tighter">Available for collab</span>
+                    </div>
                 </div>
             </div>
         </div>

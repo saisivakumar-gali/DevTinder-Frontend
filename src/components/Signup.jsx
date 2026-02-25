@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import { addUser } from '../utils/userSlice';
 import { useNavigate, Link } from 'react-router-dom';
 import { BASE_URL } from '../utils/constants';
-import { ERROR_ICON } from '../utils/icons';
 
 const Signup = () => {
   const [firstName, setFirstName] = useState('');
@@ -13,7 +12,6 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const [showToast, setShowToast] = useState(false);
   
   const dispatch = useDispatch();
@@ -23,145 +21,70 @@ const Signup = () => {
     setLoading(true);
     setError('');
     try {
-      const res = await axios.post(BASE_URL + "/signup", {
-        firstName,
-        lastName,
-        emailId,
-        password
-      }, { withCredentials: true });
-      
-      dispatch(addUser(res?.data?.data || res.data));
-     
+      const res = await axios.post(BASE_URL + "/signup", { firstName, lastName, emailId, password }, { withCredentials: true });
+      dispatch(addUser(res.data.data || res.data));
       setShowToast(true);
-            setTimeout(() => {
-                setShowToast(false);
-                navigate("/");
-            } ,1000);
+      setTimeout(() => {
+        setShowToast(false);
+        navigate("/");
+      }, 1000);
     } catch (err) {
-      setError(err?.response?.data || "Signup failed. Please check your details.");
+      setError(err?.response?.data || "Signup failed.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <>
     <div className='flex justify-center items-center min-h-[85vh] py-10 px-4'>
-      <div className="card bg-base-300 w-full max-w-md shadow-2xl border border-white/5 overflow-hidden">
-        
-        {/* Decorative Top Bar */}
-        <div className="h-2 w-full bg-linear-to-r from-primary via-secondary to-accent"></div>
-
-        <div className="card-body p-8">
-          <div className='text-center mb-6'>
-            <h2 className="text-3xl font-black tracking-tighter">Join DevTinder</h2>
-            <p className='text-sm opacity-60 mt-2'>Create your profile and start connecting</p>
+      <div className="relative w-full max-w-lg p-1 bg-gradient-to-br from-indigo-500/20 to-violet-500/20 rounded-[2.5rem] shadow-2xl">
+        <div className="bg-[#0b1120] backdrop-blur-xl p-10 rounded-[2.4rem] border border-white/5">
+          
+          <div className='text-center mb-10'>
+            <h2 className="text-4xl font-bold tracking-tighter text-white">Join the <span className="text-indigo-500">Source</span></h2>
+            <p className='text-slate-400 text-sm mt-3 opacity-60'>Build your profile and meet code partners</p>
           </div>
 
-          <div className="space-y-4">
-            {/* First & Last Name Row */}
-            <div className="flex gap-4">
-              <div className="form-control w-1/2">
-                <label className="label">
-                  <span className="label-text font-bold opacity-70">First Name</span>
-                </label>
-                <input 
-                  type="text" 
-                  placeholder=""
-                  value={firstName} 
-                  className="input input-bordered w-full focus:input-primary transition-all bg-base-200" 
-                  onChange={(e) => setFirstName(e.target.value)} 
-                />
+          <div className="space-y-5">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="form-control">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">First Name</label>
+                <input type="text" className="input bg-white/5 border-white/10 focus:border-indigo-500 rounded-2xl h-12 text-white" onChange={(e) => setFirstName(e.target.value)} />
               </div>
-              <div className="form-control w-1/2">
-                <label className="label">
-                  <span className="label-text font-bold opacity-70">Last Name</span>
-                </label>
-                <input 
-                  type="text" 
-                  placeholder=""
-                  value={lastName} 
-                  className="input input-bordered w-full focus:input-primary transition-all bg-base-200" 
-                  onChange={(e) => setLastName(e.target.value)} 
-                />
+              <div className="form-control">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">Last Name</label>
+                <input type="text" className="input bg-white/5 border-white/10 focus:border-indigo-500 rounded-2xl h-12 text-white" onChange={(e) => setLastName(e.target.value)} />
               </div>
             </div>
 
-            {/* Email Field */}
-            <div className="form-control w-full">
-              <label className="label">
-                <span className="label-text font-bold opacity-70">Email Address</span>
-              </label>
-              <input 
-                type="email" 
-                placeholder=""
-                value={emailId} 
-                className="input input-bordered w-full focus:input-primary transition-all bg-base-200" 
-                onChange={(e) => setEmailId(e.target.value)} 
-              />
+            <div className="form-control">
+              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">Email Address</label>
+              <input type="email" className="input bg-white/5 border-white/10 focus:border-indigo-500 rounded-2xl h-12 text-white" onChange={(e) => setEmailId(e.target.value)} />
             </div>
 
-            {/* Password Field */}
-            <div className="form-control w-full">
-              <label className="label">
-                <span className="label-text font-bold opacity-70">Password</span>
-              </label>
-              <div className="relative w-full">
-                <input 
-                  type={showPassword ? "text" : "password"} 
-                  placeholder="••••••••"
-                  value={password} 
-                  className="input input-bordered w-full focus:input-primary transition-all bg-base-200" 
-                  onChange={(e) => setPassword(e.target.value)} 
-                />
-                <button 
-                  type="button"
-                  className="absolute right-3 top-3 text-xs font-bold opacity-50 hover:opacity-100 transition-opacity uppercase"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? "Hide" : "Show"}
-                </button>
-              </div>
+            <div className="form-control">
+              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">Access Token (Password)</label>
+              <input type="password" placeholder="••••••••" className="input bg-white/5 border-white/10 focus:border-indigo-500 rounded-2xl h-12 text-white" onChange={(e) => setPassword(e.target.value)} />
             </div>
           </div>
 
-          {/* Elegant Error Message */}
-          {error && (
-            <div className="flex items-center gap-2 mt-4 px-1 text-error animate-pulse">
-              <ERROR_ICON />
-              <span className="text-xs font-medium">{error}</span>
-            </div>
-          )}
+          {error && <p className='text-rose-400 text-[10px] mt-4 text-center font-bold uppercase tracking-widest'>{error}</p>}
 
-          {/* Action Button */}
-          <div className="card-actions flex-col mt-8">
+          <div className="mt-10">
             <button 
-              className={`btn btn-primary btn-block text-lg shadow-lg ${loading ? 'loading' : ''}`} 
+              className={`btn border-none bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white w-full rounded-2xl h-14 font-bold shadow-xl active:scale-95 transition-all ${loading ? 'loading' : ''}`} 
               onClick={handleSignup}
-              disabled={loading}
             >
-              {loading ? "Creating Account..." : "Create Account"}
+              Initialize Node
             </button>
             
-            <div className='text-center w-full mt-6'>
-              <p className='text-sm opacity-70'>
-                Already have an account?{" "}
-                <Link to="/login" className='text-primary font-bold hover:underline'>
-                  Login here
-                </Link>
-              </p>
-            </div>
+            <p className='text-center text-sm mt-8 text-slate-500'>
+              Already synchronized? <Link to="/login" className='text-indigo-400 font-bold hover:underline'>Return to Login</Link>
+            </p>
           </div>
         </div>
       </div>
-      
     </div>
-     {showToast && <div className="toast toast-top toast-end mt-15">
-  <div className="alert alert-success">
-    <span>Sign Up Account successfully!!</span>
-  </div>
-</div>}
-    </>
   );
 };
 

@@ -4,14 +4,12 @@ import { useDispatch } from 'react-redux';
 import { addUser } from '../utils/userSlice';
 import { useNavigate, Link } from 'react-router-dom';
 import { BASE_URL } from '../utils/constants';
-import { ERROR_ICON } from '../utils/icons';
 
 const Login = () => {
   const [emailId, setEmailId] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const [showToast, setShowToast] = useState(false);
   
   const dispatch = useDispatch();
@@ -21,21 +19,15 @@ const Login = () => {
     setLoading(true);
     setError('');
     try {
-      const res = await axios.post(BASE_URL + "/login", {
-        emailId,
-        password
-      }, { withCredentials: true });
-      
+      const res = await axios.post(BASE_URL + "/login", { emailId, password }, { withCredentials: true });
       dispatch(addUser(res.data));
       setShowToast(true);
-            setTimeout(() => {
-                setShowToast(false);
-                navigate("/");
-            } ,1000);
-
-      
+      setTimeout(() => {
+        setShowToast(false);
+        navigate("/");
+      }, 1000);
     } catch (err) {
-      setError(err?.response?.data || "Invalid Credentials. Please try again.");
+      setError(err?.response?.data || "Authentication failed.");
     } finally {
       setLoading(false);
     }
@@ -43,93 +35,64 @@ const Login = () => {
 
   return (
     <div className='flex justify-center items-center min-h-[80vh] px-4'>
-      <div className="card bg-base-300 w-full max-w-md shadow-2xl border border-white/5 overflow-hidden">
-        
-        {/* Decorative Top Bar */}
-        <div className="h-2 w-full bg-linear-to-r from-primary via-secondary to-accent"></div>
-
-        <div className="card-body p-8">
-          <div className='text-center mb-6'>
-            <h2 className="text-3xl font-black tracking-tighter">Welcome Back</h2>
-            <p className='text-sm opacity-60 mt-2'>Enter your credentials to access DevTinder</p>
+      <div className="relative w-full max-w-md p-1 bg-gradient-to-tr from-indigo-500/20 to-purple-500/20 rounded-[2.5rem] shadow-2xl">
+        <div className="bg-[#0b1120] backdrop-blur-xl p-10 rounded-[2.4rem] border border-white/5">
+          
+          <div className='text-center mb-10'>
+            <div className="inline-block px-4 py-1.5 mb-4 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-bold uppercase tracking-[0.2em] text-indigo-400">
+              Developer Portal
+            </div>
+            <h2 className="text-4xl font-bold tracking-tighter text-white">Welcome Back</h2>
+            <p className='text-slate-400 text-sm mt-3 opacity-60'>Continue your journey on devtinder</p>
           </div>
 
-          <div className="space-y-4">
-           
-            <div className="form-control w-full">
-              <label className="label">
-                <span className="label-text font-bold opacity-70">Email Address</span>
-              </label>
+          <div className="space-y-6">
+            <div className="form-control">
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">Email Hash</label>
               <input 
                 type="email" 
-                placeholder="email@example.com"
-                value={emailId} 
-                className="input input-bordered w-full focus:input-primary transition-all bg-base-200" 
+                placeholder="root@devtinder.io"
+                className="input bg-white/5 border-white/10 focus:border-indigo-500 focus:bg-white/10 transition-all rounded-2xl h-14 text-white"
                 onChange={(e) => setEmailId(e.target.value)} 
               />
             </div>
 
-            
-            <div className="form-control w-full">
-              <label className="label">
-                <span className="label-text font-bold opacity-70">Password</span>
-              </label>
-              <div className="relative w-full">
-                <input 
-                  type={showPassword ? "text" : "password"} 
-                  placeholder="••••••••"
-                  value={password} 
-                  className="input input-bordered w-full focus:input-primary transition-all bg-base-200" 
-                  onChange={(e) => setPassword(e.target.value)} 
-                />
-                <button 
-                  type="button"
-                  className="absolute right-3 top-3 text-xs font-bold opacity-50 hover:opacity-100 transition-opacity uppercase"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? "Hide" : "Show"}
-                </button>
-              </div>
-              <label className="label">
-                <span className="label-text-alt link link-hover opacity-50">Forgot password?</span>
-              </label>
+            <div className="form-control">
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">Secret Key</label>
+              <input 
+                type="password" 
+                placeholder="••••••••"
+                className="input bg-white/5 border-white/10 focus:border-indigo-500 focus:bg-white/10 transition-all rounded-2xl h-14 text-white"
+                onChange={(e) => setPassword(e.target.value)} 
+              />
             </div>
           </div>
 
-          {/* Elegant Error Message - No background, just text and icon */}
-          {error && (
-            <div className="flex items-center gap-2 mt-4 px-1 text-error animate-pulse">
-              <ERROR_ICON/>
-              <span className="text-xs font-medium">{error}</span>
-            </div>
-          )}
+          {error && <p className='text-rose-400 text-xs mt-4 text-center font-medium animate-pulse'>{error}</p>}
 
-          {/* Action Button */}
-          <div className="card-actions flex-col mt-6">
+          <div className="mt-10">
             <button 
-              className={`btn btn-primary btn-block text-lg shadow-lg ${loading ? 'loading' : ''}`} 
+              className={`btn border-none bg-indigo-600 hover:bg-indigo-500 text-white w-full rounded-2xl h-14 font-bold shadow-[0_0_20px_rgba(79,70,229,0.3)] active:scale-95 transition-all ${loading ? 'loading' : ''}`} 
               onClick={handleLogin}
               disabled={loading}
             >
-              {loading ? "Verifying..." : "Login"}
+              {loading ? "Authenticating..." : "Establish Connection"}
             </button>
             
-            <div className='text-center w-full mt-6'>
-              <p className='text-sm opacity-70'>
-                New to DevTinder?{" "}
-                <Link to="/signup" className='text-primary font-bold hover:underline'>
-                  Create Account
-                </Link>
-              </p>
-            </div>
+            <p className='text-center text-sm mt-8 text-slate-500'>
+              New member? <Link to="/signup" className='text-indigo-400 font-bold hover:underline'>Initialize Account</Link>
+            </p>
           </div>
         </div>
       </div>
-      {showToast && <div className="toast toast-top toast-end mt-15">
-  <div className="alert alert-success">
-    <span>Login successfull!!</span>
-  </div>
-</div>}
+
+      {showToast && (
+        <div className="toast toast-top toast-center mt-20">
+          <div className="alert bg-indigo-600 text-white border-none rounded-2xl shadow-2xl">
+            <span className="font-bold">✓ Connection Established</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
