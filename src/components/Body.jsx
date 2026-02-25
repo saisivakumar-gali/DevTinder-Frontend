@@ -27,11 +27,10 @@ const Body = () => {
     useEffect(() => { fetchUser(); }, []);
 
     return (
-        // UI: Gradient Background (Slate to Zinc) for a premium dark look
-        <div className="min-h-screen bg-gradient-to-br from-[#121212] via-[#1a1a1a] to-[#000000] text-white font-sans">
+        <div className="min-h-screen bg-[#F9F9F9] text-black font-sans selection:bg-black selection:text-white">
             <div className="max-w-[1400px] mx-auto px-6">
                 <Navbar />
-                <main className="py-12">
+                <main className="py-8">
                     <Outlet />
                 </main>
             </div>

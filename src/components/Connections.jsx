@@ -19,23 +19,23 @@ const Connections = () => {
   useEffect(() => { fetchConnections(); }, []);
 
   return (
-    <div className='max-w-4xl mx-auto py-10 px-4'>
-      <div className="flex items-end gap-4 mb-16 border-b-2 border-white/10 pb-6">
-        <h1 className='font-black text-7xl tracking-tighter uppercase text-white'>Network</h1>
-        <span className='text-xs font-black text-gray-500 uppercase tracking-[0.5em] mb-2'>Active_Syncs // {connections?.length || 0}</span>
+    <div className='max-w-3xl mx-auto py-10 px-4'>
+      <div className="flex items-baseline gap-4 mb-12 border-b-4 border-black pb-4">
+        <h1 className='font-black text-6xl tracking-tighter uppercase'>Matches</h1>
+        <span className='text-xs font-bold opacity-30 uppercase tracking-widest'>Total // {connections?.length || 0}</span>
       </div>
 
-      <div className='grid gap-4'>
+      <div className='grid gap-1'>
         {connections?.map((connection) => (
-          <div key={connection._id} className='flex items-center gap-8 p-8 bg-gradient-to-r from-[#1a1a1a] to-black border border-white/5 rounded-xl hover:border-white/20 transition-all group'>
-            <div className="w-20 h-20 rounded-lg overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500 border border-white/10">
+          <div key={connection._id} className='flex items-center gap-6 p-6 bg-white border border-gray-100 hover:border-black transition-all group'>
+            <div className="w-16 h-16 border border-gray-200 grayscale group-hover:grayscale-0 transition-all">
               <img src={connection.photoUrl} alt="profile" className="w-full h-full object-cover" />
             </div>
             <div className='flex-1'>
-              <h2 className='font-black text-2xl tracking-tight text-white uppercase'>{connection.firstName} {connection.lastName}</h2>
-              <p className='text-[10px] font-black text-gray-500 uppercase tracking-widest mt-1'>Access_Level // {connection.age} • {connection.gender}</p>
+              <h2 className='font-bold text-xl tracking-tight'>{connection.firstName} {connection.lastName}</h2>
+              <p className='text-[10px] font-bold uppercase opacity-40 tracking-widest'>{connection.age} • {connection.gender}</p>
             </div>
-            <Link to={"/chat/"+connection._id} className="bg-white text-black px-10 py-4 font-black text-xs uppercase tracking-[0.2em] hover:bg-gray-200 active:scale-95 transition-all">
+            <Link to={"/chat/"+connection._id} className="border-2 border-black px-6 py-2 font-bold text-xs uppercase tracking-widest hover:bg-black hover:text-white transition-all">
               Message
             </Link>
           </div>

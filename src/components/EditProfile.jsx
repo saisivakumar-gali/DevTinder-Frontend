@@ -21,37 +21,36 @@ const EditProfile = ({ user }) => {
                 firstName, lastName, photoUrl, gender, age, about,
             }, { withCredentials: true });
             dispatch(addUser(res?.data?.data));
-            alert("CONFIG_UPDATED");
-        } catch (err) { setError("ERR: UPDATE_FAILED"); }
+            alert("Profile Updated Successfully");
+        } catch (err) { setError("Update failed"); }
     };
 
     return (
-        <div className='flex flex-col lg:flex-row justify-center gap-16 py-10 px-4'>
-            <div className="w-full max-w-lg bg-gradient-to-b from-[#111] to-black border border-white/10 p-12 rounded-xl shadow-2xl">
-                <h2 className="text-5xl font-black tracking-tighter uppercase text-white mb-10">Config</h2>
-                <div className="space-y-8">
+        <div className='flex flex-col lg:flex-row justify-center gap-12 py-10'>
+            <div className="w-full max-w-md bg-white border border-gray-100 p-10 shadow-sm">
+                <h2 className="text-4xl font-black tracking-tighter uppercase mb-8">Settings</h2>
+                <div className="space-y-6">
                     {['First Name', 'Last Name', 'Age', 'Photo URL'].map((label, idx) => (
-                        <div key={idx} className="border-b border-white/10 focus-within:border-white transition-all py-2">
-                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-600">{label}</label>
+                        <div key={idx} className="border-b border-gray-100 py-2">
+                            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-300">{label}</label>
                             <input 
                               type="text" 
                               value={[firstName, lastName, age, photoUrl][idx]} 
-                              className="w-full bg-transparent outline-none text-white font-bold py-1 text-lg"
+                              className="w-full outline-none text-sm font-semibold py-1 bg-transparent"
                               onChange={(e) => [setFirstName, setLastName, setAge, setPhotoUrl][idx](e.target.value)}
                             />
                         </div>
                     ))}
-                    <div className="border-b border-white/10 py-2">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-600">Bio_Data</label>
-                        <textarea className="w-full bg-transparent outline-none text-white font-bold py-1 h-24 resize-none" value={about} onChange={(e) => setAbout(e.target.value)} />
+                    <div className="border-b border-gray-100 py-2">
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-300">About</label>
+                        <textarea className="w-full outline-none text-sm font-semibold py-1 h-20 resize-none bg-transparent" value={about} onChange={(e) => setAbout(e.target.value)} />
                     </div>
-                    {error && <p className="text-red-500 font-black text-[10px] uppercase">{error}</p>}
-                    <button className="w-full bg-white text-black py-5 font-black text-xs uppercase tracking-[0.3em] hover:bg-gray-200 active:scale-95 transition-all mt-6" onClick={saveProfile}>Overwrite Local Config</button>
+                    <button className="w-full bg-black text-white py-4 font-bold text-sm uppercase tracking-widest" onClick={saveProfile}>Save Configuration</button>
                 </div>
             </div>
             <div className="flex flex-col items-center">
-              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-700 mb-6">Realtime_Output</p>
-              <UserCard user={{ firstName, lastName, age, gender, about, photoUrl }} isPreview={true} />
+              <p className="text-[10px] font-bold uppercase tracking-widest text-gray-300 mb-4">Live Preview</p>
+              <UserCard user={{ firstName, lastName, age, gender, about, photoUrl }} />
             </div>
         </div>
     );
