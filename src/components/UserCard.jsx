@@ -18,46 +18,46 @@ const UserCard = ({ user }) => {
     };
 
     return (
-        <div className="max-w-md mx-auto bg-white border border-gray-200 shadow-sm overflow-hidden animate-in fade-in duration-500">
-            {/* Header Hero Area */}
-            <div className="relative h-64 bg-gray-100 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-transparent"></div>
-                <img src={photoUrl} alt="Hero" className="w-full h-full object-cover grayscale opacity-80" />
-                {/* Diagonal Cut Overlay */}
-                <div className="absolute bottom-0 right-0 w-full h-24 bg-white transform origin-bottom-right -skew-y-6"></div>
-            </div>
-
-            <div className="p-8 -mt-12 relative z-10">
-                <div className="w-20 h-20 rounded-full border-4 border-white overflow-hidden shadow-md mb-4 bg-white">
-                    <img src={photoUrl} alt="avatar" className="w-full h-full object-cover " />
+        <div className="max-w-md mx-auto relative group">
+            {/* Background Glow Effect */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-gray-700 to-black rounded-3xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+            
+            <div className="relative bg-gradient-to-b from-[#222] to-black border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
+                {/* Image Section with monochrome gradient overlay */}
+                <div className="relative h-72">
+                    <img src={photoUrl} alt="Hero" className="w-full h-full object-cover grayscale brightness-75 transition-all duration-700 group-hover:brightness-100" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
                 </div>
 
-                <h2 className="text-3xl font-bold tracking-tighter">{firstName} {lastName}</h2>
-                <p className="text-gray-400 text-xs font-semibold uppercase tracking-widest mt-1">
-                    {gender} • {age} Years
-                </p>
+                <div className="p-8">
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <h2 className="text-4xl font-black tracking-tighter text-white uppercase">{firstName}</h2>
+                            <h2 className="text-4xl font-black tracking-tighter text-gray-600 uppercase -mt-2">{lastName}</h2>
+                        </div>
+                        <div className="bg-white text-black px-2 py-1 text-[10px] font-black uppercase tracking-tighter">
+                            LVL // {age}
+                        </div>
+                    </div>
 
-                <p className="mt-4 text-gray-600 text-sm leading-relaxed italic border-l-2 border-gray-100 pl-4">
-                    "{about || "Professional developer looking for mutual connections."}"
-                </p>
+                    <p className="mt-6 text-gray-400 text-sm leading-relaxed font-medium">
+                        "{about || "A high-performance developer looking for peer synchronization."}"
+                    </p>
 
-                <div className="flex gap-4 mt-8">
-                    <button 
-                        onClick={() => handleSendRequest("interested", _id)}
-                        className="flex-1 bg-black text-white py-4 font-bold text-sm uppercase tracking-widest hover:bg-gray-800 transition-all"
-                    >
-                        + Add
-                    </button>
-                    <button 
-                        onClick={() => handleSendRequest("ignored", _id)}
-                        className="flex-1 border border-gray-200 py-4 font-bold text-sm uppercase tracking-widest hover:bg-gray-50 transition-all"
-                    >
-                        Ignore
-                    </button>
-                </div>
-                
-                <div className="mt-6 flex justify-center">
-                    <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">Mutual Friends</span>
+                    <div className="flex gap-4 mt-8">
+                        <button 
+                            onClick={() => handleSendRequest("interested", _id)}
+                            className="flex-1 bg-white text-black py-4 font-black text-xs uppercase tracking-widest hover:bg-gray-200 transition-all active:scale-95"
+                        >
+                            + Connect
+                        </button>
+                        <button 
+                            onClick={() => handleSendRequest("ignored", _id)}
+                            className="flex-1 border border-white/20 text-white py-4 font-black text-xs uppercase tracking-widest hover:bg-white/10 transition-all active:scale-95"
+                        >
+                            Skip
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

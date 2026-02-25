@@ -11,119 +11,53 @@ const Signup = () => {
   const [emailId, setEmailId] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSignup = async () => {
     setLoading(true);
-    setError('');
     try {
-      const res = await axios.post(BASE_URL + "/signup", { 
-        firstName, 
-        lastName, 
-        emailId, 
-        password 
-      }, { withCredentials: true });
-      
+      const res = await axios.post(BASE_URL + "/signup", { firstName, lastName, emailId, password }, { withCredentials: true });
       dispatch(addUser(res?.data?.data || res.data));
       navigate("/");
-    } catch (err) {
-      setError(err?.response?.data || "Signup failed. Review inputs.");
-    } finally {
-      setLoading(false);
-    }
+    } catch (err) { alert("SIGNUP_FAILED"); } finally { setLoading(false); }
   };
 
   return (
     <div className='flex justify-center items-center min-h-[85vh] py-10 px-4'>
-      <div className="w-full max-w-lg p-12 bg-white border border-black shadow-[24px_24px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
-        
-        {/* Loading Overlay */}
-        {loading && (
-            <div className="absolute inset-0 bg-white/90 z-50 flex flex-col items-center justify-center">
-                <span className="loading loading-ring loading-lg text-black"></span>
-                <p className="text-[10px] font-black uppercase tracking-[0.4em] mt-4">Initializing Node...</p>
-            </div>
-        )}
+      <div className="w-full max-w-lg p-12 bg-gradient-to-b from-[#111] to-black border border-white/10 rounded-xl shadow-2xl relative">
+        {loading && <div className="absolute inset-0 bg-black/90 z-50 flex items-center justify-center"><span className="loading loading-ring loading-lg text-white"></span></div>}
 
-        <div className='mb-10'>
-            <h2 className="text-5xl font-black tracking-tighter uppercase leading-none">Register</h2>
-            <p className='text-gray-400 text-[10px] font-bold uppercase tracking-[0.3em] mt-4'>
-                DevTinder // New Developer Onboarding
-            </p>
-        </div>
+        <h2 className="text-6xl font-black tracking-tighter uppercase text-white mb-2 leading-none">Join</h2>
+        <p className='text-gray-600 text-[10px] font-bold uppercase tracking-[0.5em] mb-12'>Initialize_New_Node</p>
 
         <div className="space-y-8">
-          {/* Identity Block */}
           <div className="grid grid-cols-2 gap-6">
-            <div className="border-b border-gray-200 py-2">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-300">First Name</label>
-              <input 
-                type="text" 
-                className="w-full outline-none text-sm font-semibold py-1 bg-transparent" 
-                onChange={(e) => setFirstName(e.target.value)} 
-              />
+            <div className="border-b border-white/10 py-2">
+              <label className="text-[10px] font-black text-gray-600 uppercase">First_Name</label>
+              <input type="text" className="w-full bg-transparent outline-none text-white font-bold py-1" onChange={(e) => setFirstName(e.target.value)} />
             </div>
-            <div className="border-b border-gray-200 py-2">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-300">Last Name</label>
-              <input 
-                type="text" 
-                className="w-full outline-none text-sm font-semibold py-1 bg-transparent" 
-                onChange={(e) => setLastName(e.target.value)} 
-              />
+            <div className="border-b border-white/10 py-2">
+              <label className="text-[10px] font-black text-gray-600 uppercase">Last_Name</label>
+              <input type="text" className="w-full bg-transparent outline-none text-white font-bold py-1" onChange={(e) => setLastName(e.target.value)} />
             </div>
           </div>
-
-          {/* Credentials Block */}
-          <div className="border-b border-gray-200 py-2">
-            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-300">Email Address</label>
-            <input 
-              type="email" 
-              className="w-full outline-none text-sm font-semibold py-1 bg-transparent" 
-              onChange={(e) => setEmailId(e.target.value)} 
-            />
+          <div className="border-b border-white/10 py-2">
+            <label className="text-[10px] font-black text-gray-600 uppercase">Email_Address</label>
+            <input type="email" className="w-full bg-transparent outline-none text-white font-bold py-1" onChange={(e) => setEmailId(e.target.value)} />
           </div>
-
-          <div className="relative border-b border-gray-200 py-2">
-            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-300">Access Password</label>
-            <input 
-              type={showPassword ? "text" : "password"} 
-              className="w-full outline-none text-sm font-semibold py-1 bg-transparent" 
-              onChange={(e) => setPassword(e.target.value)} 
-            />
-            <button 
-              className="absolute right-0 bottom-2 text-[10px] font-bold uppercase opacity-30 hover:opacity-100 transition-opacity"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? "Hide" : "View"}
+          <div className="relative border-b border-white/10 py-2">
+            <label className="text-[10px] font-black text-gray-600 uppercase">Passphrase</label>
+            <input type={showPassword ? "text" : "password"} className="w-full bg-transparent outline-none text-white font-bold py-1" onChange={(e) => setPassword(e.target.value)} />
+            <button className="absolute right-0 bottom-2 text-[10px] font-black text-gray-600 hover:text-white" onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? "[Hide]" : "[View]"}
             </button>
           </div>
         </div>
 
-        {error && (
-            <div className="mt-6 p-4 border border-black bg-black text-white text-[10px] font-bold uppercase tracking-widest text-center">
-                Error: {error}
-            </div>
-        )}
-
-        <div className="mt-12 flex flex-col gap-6">
-          <button 
-            className="w-full bg-black text-white py-5 font-black text-xs uppercase tracking-[0.3em] hover:invert transition-all duration-300" 
-            onClick={handleSignup}
-            disabled={loading}
-          >
-            Create Identity
-          </button>
-          
-          <div className='text-center'>
-            <p className='text-[10px] font-bold uppercase tracking-widest text-gray-400'>
-                Existing User? <Link to="/login" className='text-black underline underline-offset-4'>Return to Login</Link>
-            </p>
-          </div>
-        </div>
+        <button className="w-full bg-white text-black py-5 font-black text-xs uppercase tracking-[0.4em] hover:bg-gray-200 mt-12 shadow-xl active:scale-95 transition-all" onClick={handleSignup}>Create Identity</button>
+        <p className='text-center text-[10px] font-black uppercase tracking-widest text-gray-600 mt-8'>Existing User? <Link to="/login" className='text-white underline underline-offset-4'>Log_In</Link></p>
       </div>
     </div>
   );

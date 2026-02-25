@@ -32,7 +32,7 @@ const Chat = () => {
             const otherPerson = res.data.participants?.find(p => p._id !== currentUserId);
             setTargetUser(otherPerson);
         } catch (err) {
-            console.error("Error fetching chat messages:", err);
+            console.error("Fetch Error:", err);
         }
     };
 
@@ -45,7 +45,7 @@ const Chat = () => {
     }, [messages]);
 
     useEffect(() => {
-        if (!currentUserId) return; 
+        if (!currentUserId) return;
         const socket = createSocketConnection();
         socketRef.current = socket;
         socket.emit("joinChat", { senderId: currentUserId, targetUserId });
@@ -66,71 +66,70 @@ const Chat = () => {
     };
 
     return (
-        <div className='max-w-5xl mx-auto border border-black h-[80vh] flex bg-white overflow-hidden shadow-[20px_20px_0px_0px_rgba(0,0,0,1)]'>
+        <div className='max-w-5xl mx-auto h-[80vh] flex flex-col bg-black border border-white/10 rounded-2xl overflow-hidden shadow-2xl'>
             
-            {/* Sidebar Branding (Noir Style) */}
-            <div className='w-20 md:w-64 bg-black flex flex-col items-center py-10 text-white'>
-                <div className='w-12 h-12 border-2 border-white grayscale mb-6 overflow-hidden'>
-                    <img src={targetUser?.photoUrl} alt="target" className='object-cover w-full h-full' />
-                </div>
-                <h1 className='hidden md:block font-black text-xl tracking-tighter uppercase text-center px-4'>
-                    {targetUser?.firstName}<br/>{targetUser?.lastName}
-                </h1>
-                <div className='mt-auto p-4 hidden md:block'>
-                    <p className='text-[10px] font-bold uppercase tracking-widest opacity-40 rotate-180 [writing-mode:vertical-lr]'>
-                        Established Connection // 2026
-                    </p>
-                </div>
-            </div>
-
-            {/* Main Chat Area */}
-            <div className='flex-1 flex flex-col relative'>
-                {/* Header Info */}
-                <header className='p-6 border-b border-gray-100 flex justify-between items-center'>
-                    <span className='text-[10px] font-black uppercase tracking-[0.3em]'>Direct Message // encrypted</span>
-                    <div className='flex items-center gap-2'>
-                        <div className='w-2 h-2 bg-black rounded-full animate-pulse'></div>
-                        <span className='text-[10px] font-bold uppercase tracking-widest'>Status: Active</span>
+            {/* Header: Identity Bar */}
+            <header className='p-6 bg-gradient-to-r from-[#111] to-black border-b border-white/10 flex items-center justify-between'>
+                <div className='flex items-center gap-4'>
+                    <div className='w-12 h-12 rounded-lg overflow-hidden border border-white/20 grayscale'>
+                        <img src={targetUser?.photoUrl} alt="target" className='object-cover w-full h-full' />
                     </div>
-                </header>
+                    <div>
+                        <h1 className='text-white font-black text-xl tracking-tighter uppercase'>
+                            {targetUser?.firstName} {targetUser?.lastName}
+                        </h1>
+                        <div className='flex items-center gap-2'>
+                            <div className='w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse'></div>
+                            <span className='text-[9px] font-black text-green-500 uppercase tracking-widest'>Secure_Session_Active</span>
+                        </div>
+                    </div>
+                </div>
+                <div className='hidden md:block text-right'>
+                    <p className='text-[9px] font-black text-gray-600 uppercase tracking-widest'>Channel_ID</p>
+                    <p className='text-xs font-mono text-gray-400'>#CHAT_{targetUserId?.slice(-6).toUpperCase()}</p>
+                </div>
+            </header>
 
-                {/* Messages View */}
-                <div className='flex-1 overflow-y-auto p-8 space-y-6 bg-[#FAFAFA]'>
-                    {messages.map((msg, index) => {
-                        const isSelf = msg.senderId === currentUserId;
-                        return (
-                            <div key={index} className={`flex ${isSelf ? 'justify-end' : 'justify-start'}`}>
-                                <div className={`max-w-md p-5 border ${isSelf ? 'bg-black text-white border-black' : 'bg-white text-black border-gray-200'}`}>
-                                    <p className='text-sm font-medium leading-relaxed'>{msg.text}</p>
-                                    <div className={`text-[9px] mt-2 font-bold uppercase opacity-40 flex gap-2 ${isSelf ? 'justify-end' : 'justify-start'}`}>
-                                        {formatTime(msg.createdAt || new Date())}
-                                        {isSelf && <span>[Sent]</span>}
-                                    </div>
+            {/* Message Area: Terminal View */}
+            <div className='flex-1 overflow-y-auto p-8 space-y-6 bg-[url("https://www.transparenttextures.com/patterns/carbon-fibre.png")] bg-fixed'>
+                {messages.map((msg, index) => {
+                    const isSelf = msg.senderId === currentUserId;
+                    return (
+                        <div key={index} className={`flex ${isSelf ? 'justify-end' : 'justify-start'} animate-in fade-in duration-300`}>
+                            <div className={`max-w-md p-5 rounded-xl border ${
+                                isSelf 
+                                ? 'bg-white text-black border-white' 
+                                : 'bg-gradient-to-b from-[#222] to-black text-white border-white/10'
+                            }`}>
+                                <p className='text-sm font-bold leading-relaxed'>{msg.text}</p>
+                                <div className={`text-[9px] mt-2 font-black uppercase opacity-40 flex gap-2 ${isSelf ? 'justify-end' : 'justify-start'}`}>
+                                    {formatTime(msg.createdAt || new Date())}
+                                    {isSelf && <span>[ACK]</span>}
                                 </div>
                             </div>
-                        );
-                    })}
-                    <div ref={scrollRef} />
-                </div>
+                        </div>
+                    );
+                })}
+                <div ref={scrollRef} />
+            </div>
 
-                {/* Terminal Input */}
-                <div className='p-6 border-t border-black bg-white flex items-center gap-4'>
-                    <span className='font-bold opacity-30'>{'>'}</span>
-                    <input 
-                        className='flex-1 outline-none text-sm font-bold placeholder:text-gray-300' 
-                        type="text" 
-                        placeholder="Type command / message..." 
-                        value={input} 
-                        onChange={(e) => setInput(e.target.value)} 
-                        onKeyDown={(e) => e.key === 'Enter' && sendMessage()} 
-                    />
-                    <button 
-                        className='bg-black text-white px-8 py-3 font-bold text-xs uppercase tracking-widest hover:invert transition-all' 
-                        onClick={sendMessage}
-                    >
-                        Send
-                    </button>
-                </div>
+            {/* Input: Command Line */}
+            <div className='p-6 bg-[#0a0a0a] border-t border-white/10 flex items-center gap-4'>
+                <span className='font-black text-gray-700 text-lg'>$</span>
+                <input 
+                    className='flex-1 bg-transparent outline-none text-white font-bold text-sm placeholder:text-gray-800' 
+                    type="text" 
+                    placeholder="Enter message or command..." 
+                    value={input} 
+                    onChange={(e) => setInput(e.target.value)} 
+                    onKeyDown={(e) => e.key === 'Enter' && sendMessage()} 
+                />
+                <button 
+                    className='bg-white text-black px-10 py-3 font-black text-xs uppercase tracking-[0.2em] hover:bg-gray-200 transition-all active:scale-95 shadow-lg shadow-white/5' 
+                    onClick={sendMessage}
+                >
+                    Transmit
+                </button>
             </div>
         </div>
     );
