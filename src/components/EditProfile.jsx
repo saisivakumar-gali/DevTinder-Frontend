@@ -61,7 +61,7 @@ const EditProfile = ({ user }) => {
                         className="w-full bg-black text-white py-4 font-bold text-sm uppercase tracking-widest active:scale-95 transition-transform" 
                         onClick={saveProfile}
                     >
-                        Save Configuration
+                        Save 
                     </button>
                 </div>
             </div>
