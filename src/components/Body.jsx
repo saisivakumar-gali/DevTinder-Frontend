@@ -13,29 +13,33 @@ const Body = () => {
     const user = useSelector((store) => store.user);
 
     const fetchUser = async () => {
-        if (user) return; // Don't fetch if user is already in Redux
+        if (user) return;
         try {
-            const res = await axios.get(BASE_URL + "/profile/view", {
-                withCredentials: true,
-            });
+            const res = await axios.get(BASE_URL + "/profile/view", { withCredentials: true });
             dispatch(addUser(res.data));
         } catch (err) {
-            // Only redirect if they are not on public pages
             if (location.pathname !== "/login" && location.pathname !== "/signup") {
                 navigate("/login");
             }
         }
     };
 
-    useEffect(() => {
-        fetchUser();
-    }, []);
+    useEffect(() => { fetchUser(); }, []);
 
     return (
-        <div className="min-h-screen flex flex-col">
-            <Navbar />
-            <div className="grow">
-                <Outlet />
+        // UI: Beige background, dark neutral text, and clean sans-serif font
+        <div className="min-h-screen bg-[#F2EDE4] text-[#2D2D2D] font-sans selection:bg-orange-100">
+            <div className="max-w-[1440px] mx-auto px-4 md:px-12">
+                <Navbar />
+                <main className="pb-20">
+                    <Outlet />
+                </main>
+            </div>
+            {/* Minimalist Footer integrated into the layout */}
+            <div className="fixed bottom-6 left-12 hidden lg:flex gap-6 opacity-30 text-xs font-bold uppercase tracking-widest">
+                <span>Facebook</span>
+                <span>Twitter</span>
+                <span>Instagram</span>
             </div>
         </div>
     );
