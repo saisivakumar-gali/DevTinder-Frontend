@@ -11,14 +11,14 @@ const EditProfile = ({ user }) => {
     const [photoUrl, setPhotoUrl] = useState(user.photoUrl || '');
     const [age, setAge] = useState(user.age || '');
     const [about, setAbout] = useState(user.about || '');
-    const [gender, setGender] = useState(user.gender || '');
+    // const [gender, setGender] = useState(user.gender || '');
     const [error, setError] = useState('');
     const dispatch = useDispatch();
 
     const saveProfile = async () => {
         try {
             const res = await axios.patch(BASE_URL + "/profile/edit", {
-                firstName, lastName, photoUrl, gender, age, about,
+                firstName, lastName, photoUrl,  age, about,
             }, { withCredentials: true });
             dispatch(addUser(res?.data?.data));
             alert("Profile Updated Successfully");
