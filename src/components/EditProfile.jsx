@@ -11,25 +11,27 @@ const EditProfile = ({ user }) => {
     const [photoUrl, setPhotoUrl] = useState(user.photoUrl || '');
     const [age, setAge] = useState(user.age || '');
     const [about, setAbout] = useState(user.about || '');
-    // const [gender, setGender] = useState(user.gender || '');
+    const [gender, setGender] = useState(user.gender || '');
     const [error, setError] = useState('');
     const dispatch = useDispatch();
 
     const saveProfile = async () => {
         try {
             const res = await axios.patch(BASE_URL + "/profile/edit", {
-                firstName, lastName, photoUrl,  age, about,
+                firstName, lastName, photoUrl, gender, age, about,
             }, { withCredentials: true });
             dispatch(addUser(res?.data?.data));
             alert("Profile Updated Successfully");
-        } catch (err) { setError("Update failed"); }
+        } catch (err) { 
+            // Better error logging to see the 400 Bad Request reason
+            console.error(err.response?.data);
+            setError(err.response?.data || "Update failed"); 
+        }
     };
 
     return (
-        /* Reduced gap on mobile, adjusted padding for smaller screens */
         <div className='flex flex-col lg:flex-row items-center lg:items-start justify-center gap-8 lg:gap-12 py-6 md:py-10 px-4'>
             
-            {/* Form Container: Adjusted padding for mobile (p-6 vs p-10) */}
             <div className="w-full max-w-md bg-white border border-gray-100 p-6 md:p-10 shadow-sm order-2 lg:order-1">
                 <h2 className="text-3xl md:text-4xl font-black tracking-tighter uppercase mb-6 md:mb-8">Settings</h2>
                 
@@ -45,6 +47,21 @@ const EditProfile = ({ user }) => {
                             />
                         </div>
                     ))}
+
+                    {/* --- GENDER SECTION ADDED HERE --- */}
+                    <div className="border-b border-gray-100 py-2">
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Gender</label>
+                        <select 
+                            value={gender} 
+                            onChange={(e) => setGender(e.target.value)}
+                            className="w-full outline-none text-sm font-semibold py-1 bg-transparent cursor-pointer appearance-none"
+                        >
+                            <option value="" disabled>Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
                     
                     <div className="border-b border-gray-100 py-2">
                         <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">About</label>
@@ -66,7 +83,6 @@ const EditProfile = ({ user }) => {
                 </div>
             </div>
 
-            {/* Preview Section: Added order-1 on mobile so users see the card first, then the form */}
             <div className="flex flex-col items-center w-full max-w-sm lg:max-w-none order-1 lg:order-2">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-4">Live Preview</p>
                 <div className="w-full transform scale-90 md:scale-100 transition-transform">
