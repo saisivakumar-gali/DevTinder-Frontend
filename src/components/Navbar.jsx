@@ -45,7 +45,7 @@ const Navbar = () => {
                 {user ? (
                     <div className="flex items-center gap-4">
                         <div className="w-10 h-10 rounded-sm overflow-hidden border border-gray-200">
-                            <img src={user.photoUrl} alt="pfp" className="object-cover w-full h-full grayscale" />
+                            <img src={user.photoUrl} alt="pfp" className="object-cover w-full h-full " />
                         </div>
                         <button onClick={handleLogout} className="flex items-center gap-1 text-sm font-bold border border-black px-4 py-2 hover:bg-black hover:text-white transition-all">
                             Logout

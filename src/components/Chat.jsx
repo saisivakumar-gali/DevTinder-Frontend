@@ -70,7 +70,7 @@ const Chat = () => {
             
             {/* Sidebar Branding (Noir Style) */}
             <div className='w-20 md:w-64 bg-black flex flex-col items-center py-10 text-white'>
-                <div className='w-12 h-12 border-2 border-white grayscale mb-6 overflow-hidden'>
+                <div className='w-12 h-12 border-2 border-white mb-6 overflow-hidden'>
                     <img src={targetUser?.photoUrl} alt="target" className='object-cover w-full h-full' />
                 </div>
                 <h1 className='hidden md:block font-black text-xl tracking-tighter uppercase text-center px-4'>
@@ -87,7 +87,7 @@ const Chat = () => {
             <div className='flex-1 flex flex-col relative'>
                 {/* Header Info */}
                 <header className='p-6 border-b border-gray-100 flex justify-between items-center'>
-                    <span className='text-[10px] font-black uppercase tracking-[0.3em]'>Direct Message // encrypted</span>
+                    <span className='text-[10px] font-black uppercase tracking-[0.3em]'>Developers Chat</span>
                     <div className='flex items-center gap-2'>
                         <div className='w-2 h-2 bg-black rounded-full animate-pulse'></div>
                         <span className='text-[10px] font-bold uppercase tracking-widest'>Status: Active</span>
@@ -119,7 +119,7 @@ const Chat = () => {
                     <input 
                         className='flex-1 outline-none text-sm font-bold placeholder:text-gray-300' 
                         type="text" 
-                        placeholder="Type command / message..." 
+                        placeholder="Type here..." 
                         value={input} 
                         onChange={(e) => setInput(e.target.value)} 
                         onKeyDown={(e) => e.key === 'Enter' && sendMessage()} 
