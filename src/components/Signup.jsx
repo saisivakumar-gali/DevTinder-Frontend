@@ -10,9 +10,9 @@ const Signup = () => {
   const [lastName, setLastName] = useState('');
   const [emailId, setEmailId] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showToast, setShowToast] = useState(false);
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -21,15 +21,17 @@ const Signup = () => {
     setLoading(true);
     setError('');
     try {
-      const res = await axios.post(BASE_URL + "/signup", { firstName, lastName, emailId, password }, { withCredentials: true });
-      dispatch(addUser(res.data.data || res.data));
-      setShowToast(true);
-      setTimeout(() => {
-        setShowToast(false);
-        navigate("/");
-      }, 1000);
+      const res = await axios.post(BASE_URL + "/signup", { 
+        firstName, 
+        lastName, 
+        emailId, 
+        password 
+      }, { withCredentials: true });
+      
+      dispatch(addUser(res?.data?.data || res.data));
+      navigate("/");
     } catch (err) {
-      setError(err?.response?.data || "Signup failed.");
+      setError(err?.response?.data || "Signup failed. Review inputs.");
     } finally {
       setLoading(false);
     }
@@ -37,49 +39,88 @@ const Signup = () => {
 
   return (
     <div className='flex justify-center items-center min-h-[85vh] py-10 px-4'>
-      <div className="relative w-full max-w-lg p-1 bg-gradient-to-br from-indigo-500/20 to-violet-500/20 rounded-[2.5rem] shadow-2xl">
-        <div className="bg-[#0b1120] backdrop-blur-xl p-10 rounded-[2.4rem] border border-white/5">
-          
-          <div className='text-center mb-10'>
-            <h2 className="text-4xl font-bold tracking-tighter text-white">Join the <span className="text-indigo-500">Source</span></h2>
-            <p className='text-slate-400 text-sm mt-3 opacity-60'>Build your profile and meet code partners</p>
+      <div className="w-full max-w-lg p-12 bg-white border border-black shadow-[24px_24px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
+        
+        {/* Loading Overlay */}
+        {loading && (
+            <div className="absolute inset-0 bg-white/90 z-50 flex flex-col items-center justify-center">
+                <span className="loading loading-ring loading-lg text-black"></span>
+                <p className="text-[10px] font-black uppercase tracking-[0.4em] mt-4">Initializing Node...</p>
+            </div>
+        )}
+
+        <div className='mb-10'>
+            <h2 className="text-5xl font-black tracking-tighter uppercase leading-none">Register</h2>
+            <p className='text-gray-400 text-[10px] font-bold uppercase tracking-[0.3em] mt-4'>
+                DevTinder // New Developer Onboarding
+            </p>
+        </div>
+
+        <div className="space-y-8">
+          {/* Identity Block */}
+          <div className="grid grid-cols-2 gap-6">
+            <div className="border-b border-gray-200 py-2">
+              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-300">First Name</label>
+              <input 
+                type="text" 
+                className="w-full outline-none text-sm font-semibold py-1 bg-transparent" 
+                onChange={(e) => setFirstName(e.target.value)} 
+              />
+            </div>
+            <div className="border-b border-gray-200 py-2">
+              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-300">Last Name</label>
+              <input 
+                type="text" 
+                className="w-full outline-none text-sm font-semibold py-1 bg-transparent" 
+                onChange={(e) => setLastName(e.target.value)} 
+              />
+            </div>
           </div>
 
-          <div className="space-y-5">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="form-control">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">First Name</label>
-                <input type="text" className="input bg-white/5 border-white/10 focus:border-indigo-500 rounded-2xl h-12 text-white" onChange={(e) => setFirstName(e.target.value)} />
-              </div>
-              <div className="form-control">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">Last Name</label>
-                <input type="text" className="input bg-white/5 border-white/10 focus:border-indigo-500 rounded-2xl h-12 text-white" onChange={(e) => setLastName(e.target.value)} />
-              </div>
-            </div>
-
-            <div className="form-control">
-              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">Email Address</label>
-              <input type="email" className="input bg-white/5 border-white/10 focus:border-indigo-500 rounded-2xl h-12 text-white" onChange={(e) => setEmailId(e.target.value)} />
-            </div>
-
-            <div className="form-control">
-              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">Access Token (Password)</label>
-              <input type="password" placeholder="••••••••" className="input bg-white/5 border-white/10 focus:border-indigo-500 rounded-2xl h-12 text-white" onChange={(e) => setPassword(e.target.value)} />
-            </div>
+          {/* Credentials Block */}
+          <div className="border-b border-gray-200 py-2">
+            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-300">Email Address</label>
+            <input 
+              type="email" 
+              className="w-full outline-none text-sm font-semibold py-1 bg-transparent" 
+              onChange={(e) => setEmailId(e.target.value)} 
+            />
           </div>
 
-          {error && <p className='text-rose-400 text-[10px] mt-4 text-center font-bold uppercase tracking-widest'>{error}</p>}
-
-          <div className="mt-10">
+          <div className="relative border-b border-gray-200 py-2">
+            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-300">Access Password</label>
+            <input 
+              type={showPassword ? "text" : "password"} 
+              className="w-full outline-none text-sm font-semibold py-1 bg-transparent" 
+              onChange={(e) => setPassword(e.target.value)} 
+            />
             <button 
-              className={`btn border-none bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white w-full rounded-2xl h-14 font-bold shadow-xl active:scale-95 transition-all ${loading ? 'loading' : ''}`} 
-              onClick={handleSignup}
+              className="absolute right-0 bottom-2 text-[10px] font-bold uppercase opacity-30 hover:opacity-100 transition-opacity"
+              onClick={() => setShowPassword(!showPassword)}
             >
-              Initialize Node
+              {showPassword ? "Hide" : "View"}
             </button>
-            
-            <p className='text-center text-sm mt-8 text-slate-500'>
-              Already synchronized? <Link to="/login" className='text-indigo-400 font-bold hover:underline'>Return to Login</Link>
+          </div>
+        </div>
+
+        {error && (
+            <div className="mt-6 p-4 border border-black bg-black text-white text-[10px] font-bold uppercase tracking-widest text-center">
+                Error: {error}
+            </div>
+        )}
+
+        <div className="mt-12 flex flex-col gap-6">
+          <button 
+            className="w-full bg-black text-white py-5 font-black text-xs uppercase tracking-[0.3em] hover:invert transition-all duration-300" 
+            onClick={handleSignup}
+            disabled={loading}
+          >
+            Create Identity
+          </button>
+          
+          <div className='text-center'>
+            <p className='text-[10px] font-bold uppercase tracking-widest text-gray-400'>
+                Existing User? <Link to="/login" className='text-black underline underline-offset-4'>Return to Login</Link>
             </p>
           </div>
         </div>
