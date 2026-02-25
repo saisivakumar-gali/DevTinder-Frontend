@@ -21,7 +21,7 @@ const Connections = () => {
   return (
     <div className='max-w-3xl mx-auto py-10 px-4'>
       <div className="flex items-baseline gap-4 mb-12 border-b-4 border-black pb-4">
-        <h1 className='font-black text-6xl tracking-tighter uppercase'>Matches</h1>
+        <h1 className='font-black text-6xl tracking-tighter uppercase'>Connections</h1>
         <span className='text-xs font-bold opacity-30 uppercase tracking-widest'>Total // {connections?.length || 0}</span>
       </div>
 

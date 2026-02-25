@@ -45,7 +45,7 @@ const Signup = () => {
         {loading && (
             <div className="absolute inset-0 bg-white/90 z-50 flex flex-col items-center justify-center">
                 <span className="loading loading-ring loading-lg text-black"></span>
-                <p className="text-[10px] font-black uppercase tracking-[0.4em] mt-4">Initializing Node...</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.4em] mt-4">Please wait a moment...</p>
             </div>
         )}
 
@@ -60,7 +60,7 @@ const Signup = () => {
           {/* Identity Block */}
           <div className="grid grid-cols-2 gap-6">
             <div className="border-b border-gray-200 py-2">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-300">First Name</label>
+              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">First Name</label>
               <input 
                 type="text" 
                 className="w-full outline-none text-sm font-semibold py-1 bg-transparent" 
@@ -68,7 +68,7 @@ const Signup = () => {
               />
             </div>
             <div className="border-b border-gray-200 py-2">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-300">Last Name</label>
+              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Last Name</label>
               <input 
                 type="text" 
                 className="w-full outline-none text-sm font-semibold py-1 bg-transparent" 
@@ -79,7 +79,7 @@ const Signup = () => {
 
           {/* Credentials Block */}
           <div className="border-b border-gray-200 py-2">
-            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-300">Email Address</label>
+            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Email Address</label>
             <input 
               type="email" 
               className="w-full outline-none text-sm font-semibold py-1 bg-transparent" 
@@ -88,7 +88,7 @@ const Signup = () => {
           </div>
 
           <div className="relative border-b border-gray-200 py-2">
-            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-300">Access Password</label>
+            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Access Password</label>
             <input 
               type={showPassword ? "text" : "password"} 
               className="w-full outline-none text-sm font-semibold py-1 bg-transparent" 
@@ -115,11 +115,11 @@ const Signup = () => {
             onClick={handleSignup}
             disabled={loading}
           >
-            Create Identity
+            Register
           </button>
           
           <div className='text-center'>
-            <p className='text-[10px] font-bold uppercase tracking-widest text-gray-400'>
+            <p className='text-[10px] font-bold uppercase tracking-widest text-gray-500'>
                 Existing User? <Link to="/login" className='text-black underline underline-offset-4'>Return to Login</Link>
             </p>
           </div>

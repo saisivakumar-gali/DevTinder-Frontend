@@ -32,7 +32,7 @@ const EditProfile = ({ user }) => {
                 <div className="space-y-6">
                     {['First Name', 'Last Name', 'Age', 'Photo URL'].map((label, idx) => (
                         <div key={idx} className="border-b border-gray-100 py-2">
-                            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-300">{label}</label>
+                            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{label}</label>
                             <input 
                               type="text" 
                               value={[firstName, lastName, age, photoUrl][idx]} 
@@ -42,14 +42,14 @@ const EditProfile = ({ user }) => {
                         </div>
                     ))}
                     <div className="border-b border-gray-100 py-2">
-                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-300">About</label>
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">About</label>
                         <textarea className="w-full outline-none text-sm font-semibold py-1 h-20 resize-none bg-transparent" value={about} onChange={(e) => setAbout(e.target.value)} />
                     </div>
                     <button className="w-full bg-black text-white py-4 font-bold text-sm uppercase tracking-widest" onClick={saveProfile}>Save Configuration</button>
                 </div>
             </div>
             <div className="flex flex-col items-center">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-gray-300 mb-4">Live Preview</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-4">Live Preview</p>
               <UserCard user={{ firstName, lastName, age, gender, about, photoUrl }} />
             </div>
         </div>
