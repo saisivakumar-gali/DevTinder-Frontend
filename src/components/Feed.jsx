@@ -22,15 +22,23 @@ const Feed = () => {
 
   if (!feed || feed.length === 0) {
     return (
-      <div className="flex justify-center items-center h-[60vh]">
-        <h1 className='font-bold text-sm uppercase tracking-[0.3em] opacity-20 italic'>End of Feed // Searching...</h1>
+      /* Adjusted height for mobile view to center the text better */
+      <div className="flex justify-center items-center h-[50vh] md:h-[60vh] px-6 text-center">
+        <h1 className='font-bold text-xs md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] opacity-20 italic leading-relaxed'>
+          End of Feed // Searching for new developers...
+        </h1>
       </div>
     );
   }
 
   return (
-    <div className='flex justify-center my-10 animate-in fade-in slide-in-from-bottom-5 duration-700'>
-      <UserCard user={feed[0]} />
+    /* Added px-4 to prevent the card from touching the screen edges on mobile */
+    /* Adjusted vertical margin from my-10 to my-6 for smaller screens */
+    <div className='flex justify-center my-6 md:my-10 px-4 animate-in fade-in slide-in-from-bottom-5 duration-700'>
+      {/* Container to ensure the card doesn't exceed screen width */}
+      <div className="w-full flex justify-center">
+        <UserCard user={feed[0]} />
+      </div>
     </div>
   );
 };

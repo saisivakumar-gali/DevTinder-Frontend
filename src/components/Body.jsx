@@ -28,9 +28,11 @@ const Body = () => {
 
     return (
         <div className="min-h-screen bg-[#f5e9e9] text-[#2D2D2D] font-sans">
-            <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+            {/* Reduced px-6 to px-4 for mobile; kept md:px-12 for larger screens */}
+            <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12">
                 <Navbar />
-                <main className="py-10">
+                {/* Reduced py-10 to py-6 on mobile to save vertical space */}
+                <main className="py-6 md:py-10">
                     <Outlet />
                 </main>
             </div>

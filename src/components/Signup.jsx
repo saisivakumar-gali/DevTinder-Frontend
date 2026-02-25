@@ -38,8 +38,9 @@ const Signup = () => {
   };
 
   return (
-    <div className='flex justify-center items-center min-h-[85vh] py-10 px-4'>
-      <div className="w-full max-w-lg p-12 bg-white border border-black shadow-[24px_24px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
+    <div className='flex justify-center items-center min-h-[85vh] py-6 md:py-10 px-4'>
+      {/* Reduced shadow on mobile (shadow-[12px_12px...]) to prevent horizontal scroll issues */}
+      <div className="w-full max-w-lg p-6 md:p-12 bg-white border border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] md:shadow-[24px_24px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
         
         {/* Loading Overlay */}
         {loading && (
@@ -49,16 +50,17 @@ const Signup = () => {
             </div>
         )}
 
-        <div className='mb-10'>
-            <h2 className="text-5xl font-black tracking-tighter uppercase leading-none">Register</h2>
-            <p className='text-gray-400 text-[10px] font-bold uppercase tracking-[0.3em] mt-4'>
+        <div className='mb-8 md:mb-10'>
+            {/* Scaled text from 4xl to 5xl */}
+            <h2 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-none">Register</h2>
+            <p className='text-gray-400 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.3em] mt-4'>
                 DevTinder // New Developer Onboarding
             </p>
         </div>
 
-        <div className="space-y-8">
-          {/* Identity Block */}
-          <div className="grid grid-cols-2 gap-6">
+        <div className="space-y-6 md:space-y-8">
+          {/* Identity Block: Stacks on mobile (flex-col), grid on tablet+ (sm:grid) */}
+          <div className="flex flex-col sm:grid sm:grid-cols-2 gap-6">
             <div className="border-b border-gray-200 py-2">
               <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">First Name</label>
               <input 
@@ -95,7 +97,8 @@ const Signup = () => {
               onChange={(e) => setPassword(e.target.value)} 
             />
             <button 
-              className="absolute right-0 bottom-2 text-[10px] font-bold uppercase opacity-30 hover:opacity-100 transition-opacity"
+              type="button"
+              className="absolute right-0 bottom-2 text-[10px] font-bold uppercase opacity-30 hover:opacity-100 transition-opacity p-2"
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? "Hide" : "View"}
@@ -104,14 +107,14 @@ const Signup = () => {
         </div>
 
         {error && (
-            <div className="mt-6 p-4 border border-black bg-black text-white text-[10px] font-bold uppercase tracking-widest text-center">
+            <div className="mt-6 p-4 border border-black bg-black text-white text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-center">
                 Error: {error}
             </div>
         )}
 
-        <div className="mt-12 flex flex-col gap-6">
+        <div className="mt-8 md:mt-12 flex flex-col gap-6">
           <button 
-            className="w-full bg-black text-white py-5 font-black text-xs uppercase tracking-[0.3em] hover:invert transition-all duration-300" 
+            className="w-full bg-black text-white py-4 md:py-5 font-black text-xs uppercase tracking-[0.3em] hover:invert transition-all duration-300 active:scale-[0.98]" 
             onClick={handleSignup}
             disabled={loading}
           >
@@ -120,7 +123,7 @@ const Signup = () => {
           
           <div className='text-center'>
             <p className='text-[10px] font-bold uppercase tracking-widest text-gray-500'>
-                Existing User? <Link to="/login" className='text-black underline underline-offset-4'>Return to Login</Link>
+                Existing User? <Link to="/login" className='text-black underline underline-offset-4 inline-block ml-1 py-2'>Return to Login</Link>
             </p>
           </div>
         </div>

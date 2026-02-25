@@ -24,26 +24,58 @@ const Requests = () => {
 
   useEffect(() => { fetchRequests(); }, []);
 
-  if (!requests || requests.length === 0) return <div className="text-center py-20 opacity-20 font-bold uppercase tracking-widest">No Pending Invites</div>;
+  if (!requests || requests.length === 0) {
+    return (
+      <div className="flex justify-center items-center h-[50vh]">
+        <div className="text-center opacity-20 font-bold uppercase tracking-[0.3em] text-xs">
+          No Pending Invites
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className='max-w-3xl mx-auto py-10 px-4'>
-      <h1 className='font-black text-6xl tracking-tighter uppercase mb-12 border-b-4 border-black pb-4'>Invites</h1>
+    <div className='max-w-3xl mx-auto py-6 md:py-10 px-4'>
+      {/* Header scaling from 4xl to 6xl */}
+      <h1 className='font-black text-4xl md:text-6xl tracking-tighter uppercase mb-8 md:mb-12 border-b-4 border-black pb-4'>
+        Invites
+      </h1>
+      
       <div className='grid gap-4'>
         {requests.map((request) => {
           const user = request.fromUserId;
           return (
-            <div key={user._id} className='p-8 bg-white border border-gray-100 flex flex-col sm:flex-row items-center gap-8'>
-              <div className="w-24 h-24 grayscale border border-gray-200">
+            <div key={user._id} className='p-6 md:p-8 bg-white border border-gray-100 flex flex-col sm:flex-row items-center gap-6 md:gap-8'>
+              
+              {/* Profile Image scaling */}
+              <div className="w-20 h-20 md:w-24 md:h-24 grayscale border border-gray-200 flex-shrink-0">
                 <img src={user.photoUrl} alt="profile" className="w-full h-full object-cover" />
               </div>
+
+              {/* Text info - Centered on mobile, Left-aligned on desktop */}
               <div className='flex-1 text-center sm:text-left'>
-                <h2 className='font-bold text-2xl tracking-tighter'>{user.firstName} {user.lastName}</h2>
-                <p className='text-xs text-gray-400 mt-1 italic'>"{user.about || "Wants to connect"}"</p>
+                <h2 className='font-bold text-xl md:text-2xl tracking-tighter'>
+                  {user.firstName} {user.lastName}
+                </h2>
+                <p className='text-[10px] md:text-xs text-gray-400 mt-1 italic line-clamp-2 md:line-clamp-none'>
+                  "{user.about || "Wants to connect"}"
+                </p>
               </div>
-              <div className="flex gap-2">
-                <button onClick={() => reviewRequest("rejected", request._id)} className="border border-gray-200 px-6 py-2 font-bold text-xs uppercase tracking-widest hover:bg-gray-50">Reject</button>
-                <button onClick={() => reviewRequest("accepted", request._id)} className="bg-black text-white px-6 py-2 font-bold text-xs uppercase tracking-widest hover:bg-gray-800">Accept</button>
+
+              {/* Action Buttons - Full width on mobile */}
+              <div className="flex sm:flex-col md:flex-row gap-2 w-full sm:w-auto mt-4 sm:mt-0">
+                <button 
+                  onClick={() => reviewRequest("rejected", request._id)} 
+                  className="flex-1 sm:w-32 border border-gray-200 px-4 py-3 md:py-2 font-bold text-[10px] uppercase tracking-widest hover:bg-gray-50 active:bg-gray-100 transition-colors"
+                >
+                  Reject
+                </button>
+                <button 
+                  onClick={() => reviewRequest("accepted", request._id)} 
+                  className="flex-1 sm:w-32 bg-black text-white px-4 py-3 md:py-2 font-bold text-[10px] uppercase tracking-widest hover:bg-gray-800 active:scale-95 transition-all"
+                >
+                  Accept
+                </button>
               </div>
             </div>
           );

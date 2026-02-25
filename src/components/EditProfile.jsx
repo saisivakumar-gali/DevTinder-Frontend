@@ -26,10 +26,14 @@ const EditProfile = ({ user }) => {
     };
 
     return (
-        <div className='flex flex-col lg:flex-row justify-center gap-12 py-10'>
-            <div className="w-full max-w-md bg-white border border-gray-100 p-10 shadow-sm">
-                <h2 className="text-4xl font-black tracking-tighter uppercase mb-8">Settings</h2>
-                <div className="space-y-6">
+        /* Reduced gap on mobile, adjusted padding for smaller screens */
+        <div className='flex flex-col lg:flex-row items-center lg:items-start justify-center gap-8 lg:gap-12 py-6 md:py-10 px-4'>
+            
+            {/* Form Container: Adjusted padding for mobile (p-6 vs p-10) */}
+            <div className="w-full max-w-md bg-white border border-gray-100 p-6 md:p-10 shadow-sm order-2 lg:order-1">
+                <h2 className="text-3xl md:text-4xl font-black tracking-tighter uppercase mb-6 md:mb-8">Settings</h2>
+                
+                <div className="space-y-5 md:space-y-6">
                     {['First Name', 'Last Name', 'Age', 'Photo URL'].map((label, idx) => (
                         <div key={idx} className="border-b border-gray-100 py-2">
                             <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{label}</label>
@@ -41,16 +45,33 @@ const EditProfile = ({ user }) => {
                             />
                         </div>
                     ))}
+                    
                     <div className="border-b border-gray-100 py-2">
                         <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">About</label>
-                        <textarea className="w-full outline-none text-sm font-semibold py-1 h-20 resize-none bg-transparent" value={about} onChange={(e) => setAbout(e.target.value)} />
+                        <textarea 
+                            className="w-full outline-none text-sm font-semibold py-1 h-20 resize-none bg-transparent" 
+                            value={about} 
+                            onChange={(e) => setAbout(e.target.value)} 
+                        />
                     </div>
-                    <button className="w-full bg-black text-white py-4 font-bold text-sm uppercase tracking-widest" onClick={saveProfile}>Save Configuration</button>
+
+                    {error && <p className='text-red-500 text-[10px] font-bold uppercase'>{error}</p>}
+
+                    <button 
+                        className="w-full bg-black text-white py-4 font-bold text-sm uppercase tracking-widest active:scale-95 transition-transform" 
+                        onClick={saveProfile}
+                    >
+                        Save Configuration
+                    </button>
                 </div>
             </div>
-            <div className="flex flex-col items-center">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-4">Live Preview</p>
-              <UserCard user={{ firstName, lastName, age, gender, about, photoUrl }} />
+
+            {/* Preview Section: Added order-1 on mobile so users see the card first, then the form */}
+            <div className="flex flex-col items-center w-full max-w-sm lg:max-w-none order-1 lg:order-2">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-4">Live Preview</p>
+                <div className="w-full transform scale-90 md:scale-100 transition-transform">
+                    <UserCard user={{ firstName, lastName, age, gender, about, photoUrl }} />
+                </div>
             </div>
         </div>
     );

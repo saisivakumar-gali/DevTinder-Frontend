@@ -29,23 +29,26 @@ const Login = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-[70vh]">
-            <div className="w-full max-w-sm p-10 bg-white border border-gray-100 shadow-2xl relative">
+        /* Reduced min-height on mobile to prevent unnecessary scrolling */
+        <div className="flex justify-center items-center min-h-[80vh] md:min-h-[70vh] px-4">
+            {/* Added w-[95%] and reduced padding for mobile (p-6 vs p-10) */}
+            <div className="w-full max-w-sm p-6 md:p-10 bg-white border border-gray-100 shadow-xl md:shadow-2xl relative">
                 {loading && (
                     <div className="absolute inset-0 bg-white/80 z-50 flex flex-col items-center justify-center">
                         <span className="loading loading-ring loading-lg"></span>
                     </div>
                 )}
                 
-                <h2 className="text-4xl font-bold tracking-tighter mb-2">Login</h2>
-                <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-8">DevTinder // Secure Access</p>
+                {/* Scaled text size: text-3xl on mobile, text-4xl on desktop */}
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tighter mb-2">Login</h2>
+                <p className="text-gray-400 text-[10px] md:text-xs font-bold uppercase tracking-widest mb-8">DevTinder // Secure Access</p>
 
                 <div className="space-y-6">
                     <div className="relative border-b border-gray-200 py-2">
                         <input 
                             type="email" 
                             placeholder="Email Address"
-                            className="w-full outline-none text-sm placeholder:text-gray-300"
+                            className="w-full outline-none text-sm placeholder:text-gray-300 bg-transparent"
                             onChange={(e) => setEmailId(e.target.value)} 
                         />
                     </div>
@@ -54,10 +57,11 @@ const Login = () => {
                         <input 
                             type={showPassword ? "text" : "password"} 
                             placeholder="Password"
-                            className="w-full outline-none text-sm placeholder:text-gray-300"
+                            className="w-full outline-none text-sm placeholder:text-gray-300 bg-transparent"
                             onChange={(e) => setPassword(e.target.value)} 
                         />
                         <button 
+                            type="button"
                             className="absolute right-0 top-2 text-[10px] font-bold uppercase opacity-30 hover:opacity-100"
                             onClick={() => setShowPassword(!showPassword)}
                         >
@@ -68,14 +72,14 @@ const Login = () => {
                     {error && <p className="text-red-500 text-[10px] font-bold text-center uppercase">{error}</p>}
 
                     <button 
-                        className="w-full bg-black text-white py-4 font-bold text-sm uppercase tracking-widest mt-4"
+                        className="w-full bg-black text-white py-4 font-bold text-sm uppercase tracking-widest mt-4 active:scale-[0.98] transition-transform"
                         onClick={handleLogin}
                     >
                         Sign In
                     </button>
                     
                     <div className="text-center mt-6">
-                        <Link to="/signup" className="text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-black transition-colors">
+                        <Link to="/signup" className="text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-black transition-colors block py-2">
                             Create Account →
                         </Link>
                     </div>
