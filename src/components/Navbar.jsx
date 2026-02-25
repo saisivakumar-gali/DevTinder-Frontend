@@ -20,53 +20,43 @@ const Navbar = () => {
     };
 
     const navLink = (path, label) => (
-        <Link to={path} className={`text-[11px] font-black uppercase tracking-[0.25em] transition-all ${location.pathname === path ? 'text-[#9A7B5C] border-b-2 border-[#9A7B5C]' : 'opacity-40 hover:opacity-100'}`}>
+        <Link to={path} className={`text-sm font-semibold tracking-tight transition-all pb-2 border-b-2 ${location.pathname === path ? 'border-black text-black' : 'border-transparent text-gray-400 hover:text-black'}`}>
             {label}
         </Link>
     );
 
     return (
-        <nav className="flex items-center justify-between py-10 border-b border-black/[0.03]">
-            <Link to="/" className="flex items-center gap-3 group">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#2D2D2D] to-[#666] rounded-2xl flex items-center justify-center shadow-xl group-hover:rotate-6 transition-transform">
-                    <span className="text-2xl">🧑‍💻</span>
-                </div>
-                <div className="flex flex-col leading-none">
-                    <span className="font-black text-2xl tracking-tighter">Dev<span className="text-[#9A7B5C]">Tinder</span></span>
-                    <span className="text-[8px] font-black opacity-30 uppercase tracking-[0.4em] mt-1.5">Match • Code • Connect</span>
-                </div>
+        <nav className="flex items-center justify-between py-6 border-b border-gray-100 bg-white sticky top-0 z-50">
+            <Link to="/" className="flex items-center gap-2 group">
+                <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white">🧑‍💻</div>
+                <span className="text-xl font-bold tracking-tighter">DevTinder</span>
             </Link>
 
             {user && (
-                <div className="hidden lg:flex items-center gap-10">
+                <div className="hidden md:flex items-center gap-10">
                     {navLink("/", "Explore")}
-                    {navLink("/connections", "Connections")}
-                    {navLink("/requests", "Requests")}
+                    {navLink("/connections", "Matches")}
+                    {navLink("/requests", "Invites")}
                     {navLink("/profile", "Profile")}
                 </div>
             )}
 
             <div className="flex items-center gap-6">
                 {user ? (
-                    <>
-                        <div className="text-right hidden sm:block">
-                            <p className="text-[9px] font-black opacity-30 uppercase tracking-tighter">Verified</p>
-                            <p className="text-sm font-bold">{user.firstName}</p>
+                    <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-sm overflow-hidden border border-gray-200">
+                            <img src={user.photoUrl} alt="pfp" className="object-cover w-full h-full grayscale" />
                         </div>
-                        <div className="dropdown dropdown-end">
-                            <div tabIndex={0} role="button" className="w-11 h-11 rounded-full overflow-hidden border-2 border-white shadow-xl">
-                                <img src={user.photoUrl} alt="pfp" className="object-cover w-full h-full" />
-                            </div>
-                            <ul tabIndex={0} className="menu dropdown-content bg-white mt-6 w-52 p-4 shadow-2xl rounded-[30px] border border-black/5 z-50">
-                                <li><a onClick={handleLogout} className="text-red-500 font-bold uppercase text-[10px] tracking-widest">Logout Session</a></li>
-                            </ul>
-                        </div>
-                    </>
+                        <button onClick={handleLogout} className="flex items-center gap-1 text-sm font-bold border border-black px-4 py-2 hover:bg-black hover:text-white transition-all">
+                            Logout
+                        </button>
+                    </div>
                 ) : (
-                    <Link to="/login" className="text-[11px] font-black uppercase tracking-widest hover:text-[#9A7B5C]">Login</Link>
+                    <Link to="/login" className="text-sm font-bold border border-black px-6 py-2">Login</Link>
                 )}
             </div>
         </nav>
     );
 };
+
 export default Navbar;

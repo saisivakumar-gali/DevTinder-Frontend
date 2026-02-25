@@ -27,10 +27,10 @@ const Body = () => {
     useEffect(() => { fetchUser(); }, []);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-[#FDFCFB] to-[#E2D1C3] text-[#2D2D2D] font-sans transition-all duration-700">
-            <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+        <div className="min-h-screen bg-[#F9F9F9] text-black font-sans selection:bg-black selection:text-white">
+            <div className="max-w-[1400px] mx-auto px-6">
                 <Navbar />
-                <main className="pb-20">
+                <main className="py-8">
                     <Outlet />
                 </main>
             </div>
