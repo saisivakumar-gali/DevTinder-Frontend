@@ -27,7 +27,6 @@ const Navbar = () => {
 
     return (
         <nav className="flex items-center justify-between py-10 border-b border-white/5 bg-transparent">
-            {/* --- LOGO SECTION --- */}
             <div className="flex-1">
                 <Link to="/" className="flex items-center gap-4 group">
                     <div className="w-12 h-12 bg-white text-black rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.15)] group-hover:rotate-6 transition-transform duration-500">
@@ -37,15 +36,14 @@ const Navbar = () => {
                         <span className="font-black text-2xl tracking-tighter text-white uppercase">
                             Dev<span className="text-gray-500">Tinder</span>
                         </span>
-                        {/* THE NEW TAGLINE */}
-                        <span className="text-[7px] font-black text-gray-600 uppercase tracking-[0.5em] mt-2 animate-pulse">
+                        {/* Tagline Integration */}
+                        <span className="text-[7px] font-black text-gray-600 uppercase tracking-[0.5em] mt-2">
                             MATCH // CODE // SYNC
                         </span>
                     </div>
                 </Link>
             </div>
 
-            {/* --- CENTER NAVIGATION --- */}
             {user && (
                 <div className="hidden lg:flex items-center gap-12">
                     {navLink("/", "Explore")}
@@ -55,12 +53,11 @@ const Navbar = () => {
                 </div>
             )}
 
-            {/* --- USER ACTIONS --- */}
             <div className="flex-1 flex justify-end items-center gap-6">
                 {user ? (
                     <div className="flex items-center gap-5">
                         <div className="text-right hidden sm:block">
-                            <p className="text-[9px] font-black text-gray-600 uppercase tracking-widest">Authorized</p>
+                            <p className="text-[9px] font-black text-gray-600 uppercase tracking-widest text-[7px]">Status: Authorized</p>
                             <p className="text-sm font-black text-white">{user.firstName}</p>
                         </div>
                         <div className="dropdown dropdown-end">
