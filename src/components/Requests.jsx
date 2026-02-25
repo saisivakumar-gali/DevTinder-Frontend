@@ -1,122 +1,56 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { BASE_URL } from '../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { addRequests, removeRequest } from '../utils/requestSlice';
 
 const Requests = () => {
-  
-  const dispatch=useDispatch();
-  const requests=useSelector(store=>store.requests);
+  const dispatch = useDispatch();
+  const requests = useSelector(store => store.requests);
 
-  const reviewRequest=async(status,_id)=>{
-    try{
-      const res=await axios.post(BASE_URL+"/request/review/"+status+"/"+_id,{},{withCredentials:true});
+  const reviewRequest = async (status, _id) => {
+    try {
+      await axios.post(BASE_URL + "/request/review/" + status + "/" + _id, {}, { withCredentials: true });
       dispatch(removeRequest(_id));
+    } catch (err) { console.log(err); }
+  };
 
-     
-    }
-    catch(err){
-      console.log("Error reviewing request",err);
-    }
-  }
-
-  const fetchRequests=async()=>{
-    try{
-      const res=await axios.get(BASE_URL+"/user/requests/received",{withCredentials:true});
-      console.log(res.data.data);
+  const fetchRequests = async () => {
+    try {
+      const res = await axios.get(BASE_URL + "/user/requests/received", { withCredentials: true });
       dispatch(addRequests(res.data.data));
-    }
-    catch(err){
-      console.log("Error fetching requests",err);
-    }
-  }
+    } catch (err) { console.log(err); }
+  };
 
-  useEffect(()=>{
-    fetchRequests();
-  },[]);
-  if (!requests) return null;
+  useEffect(() => { fetchRequests(); }, []);
 
-  if (requests.length === 0) {
-    return (
-      <div className="flex justify-center items-center h-[60vh]">
-        <h1 className='font-bold text-2xl opacity-50 italic'>No requests found yet...</h1>
-      </div>
-    );
-  }
+  if (!requests || requests.length === 0) return <div className="text-center py-20 opacity-20 font-bold uppercase tracking-widest">No Pending Invites</div>;
 
   return (
-    // Added container constraints and pb-20 to avoid footer overlap
-    <div className='max-w-4xl mx-auto my-10 px-4 pb-20'>
-      <div className="flex justify-between items-center mb-10 border-b border-base-300 pb-4">
-        <h1 className='font-extrabold text-4xl tracking-tight'>Requests</h1>
-        <div className="badge badge-primary badge-lg px-4">{requests.length} total</div>
-      </div>
-
-      <div className='grid gap-6'>
+    <div className='max-w-3xl mx-auto py-10 px-4'>
+      <h1 className='font-black text-6xl tracking-tighter uppercase mb-12 border-b-4 border-black pb-4'>Invites</h1>
+      <div className='grid gap-4'>
         {requests.map((request) => {
-          if (!request.fromUserId) return null;
-          const { firstName, lastName, photoUrl, gender, age, about, _id } = request.fromUserId;
-          
+          const user = request.fromUserId;
           return (
-            <div 
-              key={_id} 
-              className='flex items-center gap-6 p-5 rounded-2xl bg-base-300/50 hover:bg-base-300 border border-white/5 transition-all shadow-xl hover:shadow-primary/5 group'
-            >
-              {/* Profile Image with Ring */}
-              <div className="avatar">
-                <div className="w-24 h-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                  <img src={photoUrl || "https://via.placeholder.com/150"} alt="profile" />
-                </div>
+            <div key={user._id} className='p-8 bg-white border border-gray-100 flex flex-col sm:flex-row items-center gap-8'>
+              <div className="w-24 h-24 grayscale border border-gray-200">
+                <img src={user.photoUrl} alt="profile" className="w-full h-full object-cover" />
               </div>
-
-              {/* Text Info Section */}
-              <div className='flex-1 overflow-hidden'>
-                <div className='flex items-baseline gap-2'>
-                  <h2 className='font-bold text-2xl group-hover:text-primary transition-colors'>
-                    {firstName} {lastName}
-                  </h2>
-                  {age && (
-                    <span className='text-sm opacity-60 font-medium'>• {age} {gender && `, ${gender}`}</span>
-                  )}
-                </div>
-
-                {/* About Section with Line Clamping */}
-                <p className='mt-2 text-sm opacity-80 leading-relaxed line-clamp-2 italic'>
-                  {about ? `"${about}"` : "No bio available."}
-                </p>
-
-                <div className='mt-3 flex gap-2'>
-                   <button className="btn btn-xs btn-outline btn-primary px-4">Message</button>
-                   <button className="btn btn-xs btn-ghost opacity-50">View Profile</button>
-                </div>
+              <div className='flex-1 text-center sm:text-left'>
+                <h2 className='font-bold text-2xl tracking-tighter'>{user.firstName} {user.lastName}</h2>
+                <p className='text-xs text-gray-400 mt-1 italic'>"{user.about || "Wants to connect"}"</p>
               </div>
-
-            
-              <div className="flex flex-col sm:flex-row gap-3">
-  <button 
-    className="btn btn-sm btn-ghost text-error hover:bg-error/10 border border-error/20 px-6 rounded-xl transition-all duration-300 active:scale-95"
-    onClick={() =>{
-      reviewRequest("rejected",request._id);
-    }}
-  >
-    Reject
-  </button>
-  <button 
-    className="btn btn-sm btn-primary px-8 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-300 active:scale-95"
-    onClick={() => {
-      reviewRequest("accepted",request._id);
-    }}
-  >
-    Accept
-  </button>
-</div>
+              <div className="flex gap-2">
+                <button onClick={() => reviewRequest("rejected", request._id)} className="border border-gray-200 px-6 py-2 font-bold text-xs uppercase tracking-widest hover:bg-gray-50">Reject</button>
+                <button onClick={() => reviewRequest("accepted", request._id)} className="bg-black text-white px-6 py-2 font-bold text-xs uppercase tracking-widest hover:bg-gray-800">Accept</button>
+              </div>
             </div>
-          )
+          );
         })}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Requests
+export default Requests;

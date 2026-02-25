@@ -19,25 +19,30 @@ const Connections = () => {
   useEffect(() => { fetchConnections(); }, []);
 
   return (
-    <div className='max-w-3xl mx-auto py-10'>
-      <h1 className='text-5xl font-black tracking-tighter mb-12 text-black'>Connections<span className="text-[#9A7B5C]">.</span></h1>
-      <div className='grid gap-4'>
-        {connections?.map((conn) => (
-          <div key={conn._id} className='bg-white p-6 rounded-[35px] flex items-center justify-between shadow-sm border border-black/[0.03] hover:shadow-xl transition-all duration-500'>
-            <div className="flex items-center gap-6">
-              <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#F2EDE4]">
-                <img src={conn.photoUrl} alt="pfp" className="object-cover w-full h-full" />
-              </div>
-              <div>
-                <h2 className='font-black text-xl'>{conn.firstName} {conn.lastName}</h2>
-                <p className='text-[#9A7B5C] font-bold text-[10px] uppercase tracking-widest'>{conn.gender} // {conn.age}</p>
-              </div>
+    <div className='max-w-3xl mx-auto py-10 px-4'>
+      <div className="flex items-baseline gap-4 mb-12 border-b-4 border-black pb-4">
+        <h1 className='font-black text-6xl tracking-tighter uppercase'>Matches</h1>
+        <span className='text-xs font-bold opacity-30 uppercase tracking-widest'>Total // {connections?.length || 0}</span>
+      </div>
+
+      <div className='grid gap-1'>
+        {connections?.map((connection) => (
+          <div key={connection._id} className='flex items-center gap-6 p-6 bg-white border border-gray-100 hover:border-black transition-all group'>
+            <div className="w-16 h-16 border border-gray-200 grayscale group-hover:grayscale-0 transition-all">
+              <img src={connection.photoUrl} alt="profile" className="w-full h-full object-cover" />
             </div>
-            <Link to={"/chat/"+conn._id} className="bg-[#2D2D2D] text-white px-8 py-3 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-black transition-all">Message</Link>
+            <div className='flex-1'>
+              <h2 className='font-bold text-xl tracking-tight'>{connection.firstName} {connection.lastName}</h2>
+              <p className='text-[10px] font-bold uppercase opacity-40 tracking-widest'>{connection.age} • {connection.gender}</p>
+            </div>
+            <Link to={"/chat/"+connection._id} className="border-2 border-black px-6 py-2 font-bold text-xs uppercase tracking-widest hover:bg-black hover:text-white transition-all">
+              Message
+            </Link>
           </div>
         ))}
       </div>
     </div>
   );
 };
+
 export default Connections;
