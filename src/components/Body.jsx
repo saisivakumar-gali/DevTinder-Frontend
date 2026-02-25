@@ -27,19 +27,21 @@ const Body = () => {
     useEffect(() => { fetchUser(); }, []);
 
     return (
-        // UI: Beige background, dark neutral text, and clean sans-serif font
-        <div className="min-h-screen bg-[#F2EDE4] text-[#2D2D2D] font-sans selection:bg-orange-100">
-            <div className="max-w-[1440px] mx-auto px-4 md:px-12">
+        <div 
+            className="min-h-screen transition-colors duration-500" 
+            style={{ backgroundColor: '#F2EDE4', color: '#2D2D2D', fontFamily: 'Inter, sans-serif' }}
+        >
+            <div className="max-w-[1400px] mx-auto px-6 md:px-12">
                 <Navbar />
-                <main className="pb-20">
+                <main className="pb-24">
                     <Outlet />
                 </main>
             </div>
-            {/* Minimalist Footer integrated into the layout */}
-            <div className="fixed bottom-6 left-12 hidden lg:flex gap-6 opacity-30 text-xs font-bold uppercase tracking-widest">
-                <span>Facebook</span>
-                <span>Twitter</span>
-                <span>Instagram</span>
+            
+            {/* Minimalist Side Branding */}
+            <div className="fixed bottom-10 left-12 hidden xl:flex gap-8 opacity-20 text-[10px] font-bold uppercase tracking-[0.4em] rotate-180 [writing-mode:vertical-lr]">
+                <span>DevTinder // Connect</span>
+                <span>Match // Code</span>
             </div>
         </div>
     );
