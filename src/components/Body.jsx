@@ -27,10 +27,25 @@ const Body = () => {
     useEffect(() => { fetchUser(); }, []);
 
     return (
-        <div className="min-h-screen bg-[#F9F9F9] text-black font-sans selection:bg-black selection:text-white">
-            <div className="max-w-[1400px] mx-auto px-6">
+        /** * 1. Responsive Gradient Background: 
+         * Added a subtle linear gradient from top-left to bottom-right.
+         */
+        <div className="min-h-screen bg-gradient-to-br from-[#d0c5c5] via-[#b8adaa] to-[#a39696] text-black font-sans selection:bg-black selection:text-white">
+            
+            /** * 2. Max-Width Container & Responsive Padding:
+             * px-4 for small mobile devices, px-8 for tablets, and px-12 for desktops.
+             */
+            <div className="max-w-[1400px] mx-auto px-4 sm:px-8 md:px-12">
+                
+                /** * 3. Navbar logic: 
+                 * Ensure your Navbar component uses flex-col or hidden menus on mobile.
+                 */
                 <Navbar />
-                <main className="py-8">
+                
+                /** * 4. Main Responsive Content:
+                 * py-4 on mobile and py-10 on larger screens to maximize space.
+                 */
+                <main className="py-4 md:py-10">
                     <Outlet />
                 </main>
             </div>
