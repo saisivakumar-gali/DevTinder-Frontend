@@ -27,7 +27,7 @@ const Body = () => {
     useEffect(() => { fetchUser(); }, []);
 
     return (
-        <div className="min-h-screen bg-[#f5e9e9] text-[#2D2D2D] font-sans">
+        <div className="min-h-screen bg-gradient-to-br from-[#fd267a] via-[#ff6036] to-[#ff7854] selection:bg-white/30 text-[#2D2D2D] font-sans">
             {/* Reduced px-6 to px-4 for mobile; kept md:px-12 for larger screens */}
             <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12">
                 <Navbar />
