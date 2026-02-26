@@ -5,7 +5,7 @@ import axios from 'axios';
 import { BASE_URL } from '../utils/constants';
 import { removeUser } from '../utils/userSlice';
 // Import your logo here - assuming it's in your assets folder
-import logo from "../assets/logo.png"; 
+import logo from '../assests/logo.png';
 
 const Navbar = () => {
     const user = useSelector((store) => store.user);
